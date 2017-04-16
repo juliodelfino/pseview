@@ -315,7 +315,7 @@
             resetContextMenuLocation();
             return $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/latest.php",
+                url : "/latest.php",
                 data : filter,
                 dataFilter : filterPseData,
                 dataType : "JSON"
@@ -391,7 +391,7 @@
             //Company list cannot be stored in the cookies because of its 4096-byte limit.
             $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/companylist.php",
+                url : "/companylist.php",
                 dataType : "JSON"
             }).done(resetFilterData);
 
@@ -716,7 +716,7 @@
         
             $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/summary.php",
+                url : "/summary.php",
                 dataType : "JSON"
             }).done(function(data) {
             	dailySummary = data.records[0];

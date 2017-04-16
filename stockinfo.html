@@ -459,7 +459,7 @@
 
             $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/summary.php",
+                url : "/summary.php",
                 dataType : "JSON"
             }).done(function(data) {
                 dailySummary = data.records[0];
@@ -487,7 +487,7 @@
 
             $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/stockinfo.php?code=" + stockSymbol,
+                url : "/stockinfo.php?code=" + stockSymbol,
                 dataType : "JSON"
             }).done(function(data) {
 
@@ -739,7 +739,7 @@
             $('#load-icon').show();
             $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/chart.php?code=" + selectedStockSymbol + "&type=" + chartType,
+                url : "/chart.php?code=" + selectedStockSymbol + "&type=" + chartType,
                 dataType : "JSON"
             }).done(function(data) {
 
@@ -902,7 +902,7 @@
 
             $.ajax({
                 type : "GET",
-                url : "http://pse.jdelfino.com/stockinfo.php?code=" + stockSymbol,
+                url : "/stockinfo.php?code=" + stockSymbol,
                 dataType : "JSON"
             }).done(function(data) {
 
