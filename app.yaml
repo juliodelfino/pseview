@@ -2,5 +2,18 @@ runtime: php55
 api_version: 1
 
 handlers:
-- url: /.*
-  script: index.html
+- url: /(.*\.css)
+  mime_type: text/css
+  static_files: assets/\1
+  upload: assets/(.*\.css)
+  
+- url: /(.*\.js)
+  mime_type: text/javascript
+  static_files: assets/\1
+  upload: assets/(.*\.js)
+  
+- url: /(.+\.php)$
+  script: \1
+  
+- url: /(.+\.html)$
+  script: \1
