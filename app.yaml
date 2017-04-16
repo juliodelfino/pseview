@@ -17,3 +17,6 @@ handlers:
   
 - url: /(.+\.html)$
   script: \1
+  
+- url: /.*
+  script: index.html
