@@ -372,7 +372,6 @@
                     $(this).hide();
                     var text = $(this).val().toUpperCase();
                     if (searchStockSymbol(text) != undefined) {
-                        resetPage();
                         startGetStockInfo(text);
                     }
 
@@ -393,6 +392,10 @@
             $('#stock-symbol-input').blur(function() {
                 $(this).hide();
             });
+            
+            $('#stock-name, #stock-latest').click(function() {
+                scrollToBadge(selectedStockSymbol);
+            });
 
             $('.stock-badge').click(function() {
                 var symbol = $(this).text();
@@ -411,7 +414,7 @@
                 $('#stock-symbol-input').val(symbol);
                 $(this).css('background-color', '#777');
                 scrollToBadge(symbol);
-
+                resetPage();
                 getLatestStockInfo(symbol);
                 populateCompanyInfoFields(symbol);
                 drawChart();
@@ -431,7 +434,7 @@
         function resetPage() {
             $('#stock-name').text("--");
 
-            $('#stock-datetime').text("--");
+            //$('#stock-datetime').text("--");
             $('#stock-latest').text("--");
             $('#stock-diff').text("--");
             $('#stock-change').text("--");
