@@ -18,5 +18,9 @@ handlers:
 - url: /(.+\.html)$
   script: \1
   
+- url: /images/(.*\.(bmp|gif|ico|jpeg|jpg|png))
+  static_files: images/\1
+  upload: images/(.*\.(bmp|gif|ico|jpeg|jpg|png))
+  
 - url: /.*
   script: index.html
