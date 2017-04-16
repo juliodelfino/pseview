@@ -2,12 +2,12 @@ runtime: php55
 api_version: 1
 
 handlers:
-- url: /(.*\.css)
+- url: /assets/(.*\.css)
   mime_type: text/css
   static_files: /assets/\1
   upload: /assets/(.*\.css)
   
-- url: /(.*\.js)
+- url: /assets/(.*\.js)
   mime_type: text/javascript
   static_files: /assets/\1
   upload: /assets/(.*\.js)
