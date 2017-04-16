@@ -1,0 +1,9 @@
+{
+  "project_name": "PSE View",
+  "project_description": "PSE data in a different but better view.",
+  "show_files": [
+    "index.html",
+    "app.yaml"
+  ],
+  "download_filename": "pseview.zip"
+}
