@@ -1,0 +1,524 @@
+<html>
+    <head>
+        <title>PSE Latest Info</title>
+        <script src="https://www.google.com/jsapi"></script>
+        <script src="assets/jquery.js"></script>
+        <script src="assets/common.js"></script>
+        <link type="text/css" rel="stylesheet" href="assets/common.css" />
+
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+        <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css" />
+        <!-- This import doesn't work for Blackberry 10 browser
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        -->
+        <script src="assets/bootstrap.js"></script>
+    <link rel="stylesheet" media="all" href="assets/bootstrap.css" />
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid-theme.min.css" />
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.min.js"></script>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="/assets/flyoutmenu.css" />
+        <script src="/assets/flyoutmenu.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+        <meta charset="UTF-8">
+    </head>
+    <body>
+            Hello this is a new website!
+    </body>
+    <script>
+        var savedWatchlist = null;
+        var companyMap = [];
+        var paused = false;
+
+        $(document).ready(function() {
+
+            queryMap = getQueryString();
+            if (queryMap['view'] == 'tiles') {
+                $('#toggle-display').prop('checked', false).trigger('change');
+            }
+            savedWatchlist = getWatchlistFromCookie(queryMap);
+            initialize();
+        });
+
+        function initialize() {
+
+            initPseTable();
+            initPageComponents();
+            tryStartPollingData();
+        }
+
+        //==== PSE table functions ==========
+
+        function initPseTable() {
+
+            $("#jsGrid").jsGrid({
+                height : "80%",
+                width : "100%",
+                selecting : false,
+                sorting : true,
+                autoload : true,
+                loadIndication : false,
+                controller : {
+                    loadData : onJsGridLoadData
+                },
+
+                fields : [{
+                    name : "securitySymbol",
+                    title : "SYMBOL",
+                    type : "text",
+                    width : "90px",
+                    cellRenderer : renderSecuritySymbol
+                }, {
+                    name : "lastTradedPrice",
+                    title : "PRICE",
+                    type : "number",
+                    width : "60px",
+                    sorter : compareNumbersWithCommas
+                }, {
+                    name : "percChangeClose",
+                    title : "%CHG",
+                    width : "60px",
+                    type : "number"
+                }, {
+                    name : "totalVolume",
+                    title : "VOLUME",
+                    type : "number",
+                    width : "80px",
+                    sorter : compareNumbersWithCommas
+                }],
+                rowRenderer : gridViewRowRenderer,
+                rowClass : function(item, itemIdx) {
+                    return item.percChangeClose < 0 ? 'lose-font' : item.percChangeClose > 0 ? 'gain-font' : '';
+                },
+                onDataLoaded : onJsGridDataLoaded,
+                onRefreshed : onJsGridRefreshed
+            });
+        }
+
+        function filterPseData(responseData) {
+            var updateInfo = null;
+            var pseSummary = null;
+
+            var jsonData = $.parseJSON(responseData);
+            selectedStocks = $('#filter-select').val();
+            selectedStocks = selectedStocks != null ? selectedStocks : [];
+            jsonData = jsonData.filter(function(row) {
+
+                if (row.lastTradedPrice == "DATE") {
+                    updateInfo = row;
+                    $("#update-time").text(row.securityAlias + ' (PHT)');
+                } else if (row.indicatorImg != "" && row.securitySymbol == "PSE") {
+                    pseSummary = row;
+                    $("#pse-index").text(row.totalVolume);
+                }
+
+                return row.indicatorImg == "" && (selectedStocks.length == 0 || $.inArray(row.securitySymbol, selectedStocks) >= 0);
+            });
+
+            return JSON.stringify(jsonData);
+        }
+
+        function onJsGridLoadData(filter) {
+            
+            resetContextMenuLocation();
+            return $.ajax({
+                type : "GET",
+                url : "http://pse.jdelfino.com/latest.php",
+                data : filter,
+                dataFilter : filterPseData,
+                dataType : "JSON"
+            });
+        }
+
+        function onJsGridDataLoaded() {
+
+            var sortConfig = $("#jsGrid").jsGrid("getSorting");
+            $("#jsGrid").jsGrid("sort", sortConfig);
+        }
+
+        function onJsGridRefreshed() {
+
+            $(".stock-menu").click(function() {
+                //move context menu just next to the selected link, not put inside it
+                $(this).after(stock_ctx_menu.detach());
+
+                var selectedStock = $(this).parent().attr('id');
+                $('#info-stock-name').text(selectedStock);
+
+            });
+
+        /*    $('[data-toggle="popover"]').popover({
+                trigger : 'hover',
+                html : true,
+                placement : 'auto top',
+                title : function() {
+                    var symbol = $(this).data('id');
+                    return companyMap[symbol].securityName;
+                },
+                content : function() {
+                    var symbol = $(this).data('id');
+                    var tokens = companyMap[symbol].listingDate.split(' ')[0].split('-');
+                    var listingDate = new Date(tokens[0], tokens[1] - 1, tokens[2]);
+                    return '<p style="white-space: nowrap"><span class="text-muted">Date Listed:</span> ' + $.format.date(listingDate, 'MMM dd, yyyy') + '</p>';
+                }
+            }); */
+            
+            $('[data-toggle="popover"]').click(function(){
+                selectedStock = $(this).data('id');
+                window.location = "/stockinfo.html?code=" + selectedStock;
+            });
+
+        }
+
+        function renderSecuritySymbol(item) {
+            return $('<td><a data-id="' + item + '" data-toggle="popover">' + item + '</a><span class="dropdown" id="' + item + '"><img src="/images/more-btn.jpg" class="stock-menu" data-toggle="dropdown" /></span></td>');
+        }
+
+        function gridViewRowRenderer(item) {
+
+            var tableView = $('#toggle-display').prop('checked');
+            if (tableView) {
+                // copied from jsGrid.js (where this.rowRenderer is not a function)
+                $result = $("<tr>");
+                this._renderCells($result, item);
+                return $result;
+            }
+
+            return $('<div class="grid-view-item">' + '<a data-toggle="popover" data-id="' + item.securitySymbol + '" class="gv-symbol">' + item.securitySymbol + '</a><br/>' + '<span class="gv-symbol">' + item.lastTradedPrice + '</span><br/>' + item.percChangeClose + '%<br/>' + item.totalVolume + '</div>');
+        }
+
+        //==== Table Filtering functions ========
+
+        var appliedFilter = [];
+        var initFilter = function() {
+
+            $("#filter-select").select2({
+                width : '100%'
+            });
+
+            //Company list cannot be stored in the cookies because of its 4096-byte limit.
+            $.ajax({
+                type : "GET",
+                url : "http://pse.jdelfino.com/companylist.php",
+                dataType : "JSON"
+            }).done(resetFilterData);
+
+            $('#filter-button').click(onFilterButtonClicked);
+
+            initWatchlistActions();
+        };
+
+        function resetFilterData(data) {
+
+            var companyList = sortCompanyList(data.records);
+            $.each(companyList, function(i, item) {
+                if (item.securityStatus != "O") {
+                    return;
+                }
+                $('#filter-select').append($('<option>', {
+                    value : item.securitySymbol,
+                    text : item.securitySymbol
+                }));
+                companyMap[item.securitySymbol] = item;
+            });
+
+            queryMap = getQueryString();
+            if (queryMap['stocks'] != undefined) {
+                selectedStocks = queryMap['stocks'].split('+');
+                $('#filter-select').val(selectedStocks);
+                onFilterButtonClicked();
+            }
+        }
+
+        function onFilterButtonClicked() {
+
+            resetContextMenuLocation();
+
+            appliedFilter = $('#filter-select').val();
+            if (appliedFilter == null || appliedFilter.length == 0) {
+                $('#watchlist-actions').hide();
+            } else {
+                $('#watchlist-actions').show();
+            }
+            $("#jsGrid").jsGrid("loadData");
+        }
+
+        function setFilter(name) {
+            var s = $('#filter-select').val();
+            if (s == undefined) {
+                s = [];
+            }
+            s.push(name);
+            $('#filter-select').val(s);
+            $("#filter-select").select2({
+                width : '100%'
+            });
+        }
+
+        function initWatchlistActions() {
+
+            $('#btn-save-list').click(function() {
+                $('#dialog-stock-list').text($('#filter-select').val().join(', '));
+                $('#dialog-view-type').text($('#toggle-display').prop('checked') ? 'List' : 'Tiles');
+                $('#dialog-form').dialog('open');
+            });
+
+            $('#btn-delete-list').click(function() {
+                var watchlists = JSON.parse($.cookie("watchlists"));
+                delete watchlists[savedWatchlist];
+                $.cookie("watchlists", JSON.stringify(watchlists), {
+                    expires : 90
+                });
+                updateMyWatchlistMenu();
+                showAlertSuccess();
+                $('#btn-reset-table').trigger('click');
+            });
+
+            if (savedWatchlist == null) {
+                $('#btn-delete-list').css('display', 'none');
+            }
+
+            $('#btn-reset-table').click(function() {
+                $('#filter-select').val([]);
+                $('#filter-select').trigger('change');
+                onFilterButtonClicked();
+            });
+        }
+
+        //==== Page Component functions =============
+
+        function initPageComponents() {
+
+            initFilter();
+            initContextMenu();
+            initDisplayToggle();
+            initDialogs();
+            initFlyoutButtons();
+        }
+
+        var stock_ctx_menu = null;
+
+        function initContextMenu() {
+            stock_ctx_menu = $('#stock-context-menu');
+
+            $('#get-info-btn').click(function() {
+                var selectedStock = stock_ctx_menu.parent().attr('id');
+                window.location = "/stockinfo.html?code=" + selectedStock;
+            });
+
+            $('#add-to-filter-btn').click(function() {
+                var selectedStock = stock_ctx_menu.parent().attr('id');
+                setFilter(selectedStock);
+            });
+        }
+
+        function resetContextMenuLocation() {
+            if (stock_ctx_menu != null) {
+                //move context menu outside the table to avoid being disposed
+                $(".container-fluid").after(stock_ctx_menu.detach());
+            }
+        }
+
+        function initDisplayToggle() {
+
+            updateTableView();
+            $('#toggle-display').change(function() {
+
+                resetContextMenuLocation();
+
+                $('#jsGrid').jsGrid('render');
+
+                updateTableView();
+            });
+        }
+
+        function updateTableView() {
+
+            //if rowDisplay has property 'checked' then display as List view, else Tiles view.
+            var listView = $('#toggle-display').prop('checked');
+            if (listView) {
+                $('#jsGrid').removeClass('grid-view-table');
+            } else {
+                $('#jsGrid').addClass('grid-view-table');
+            }
+        }
+
+        function initDialogs() {
+
+            var dialog = $("#dialog-form").dialog({
+                autoOpen : false,
+                height : 'auto',
+                width : 350,
+                modal : true,
+                buttons : [{
+                    text : "Save",
+                    "class" : 'btn btn-primary',
+                    click : function() {
+                        dialog.dialog("close");
+
+                        var listName = $('#dialog-list-name').val();
+                        var stocks = $('#filter-select').val();
+                        var viewType = $('#toggle-display').prop('checked') ? 'list' : 'tiles';
+
+                        var queryString = "stocks=" + stocks.join('+') + "&view=" + viewType;
+
+                        var watchlists = $.cookie("watchlists");
+                        if (watchlists == undefined) {
+                            watchlists = {};
+                        } else {
+                            watchlists = JSON.parse(watchlists);
+                        }
+                        watchlists[listName] = queryString;
+                        $.cookie("watchlists", JSON.stringify(watchlists), {
+                            expires : 90
+                        });
+
+                        showAlertSuccess();
+                        updateMyWatchlistMenu();
+                    }
+                }, {
+                    text : "Cancel",
+                    "class" : 'btn btn-warning',
+                    click : function() {
+                        dialog.dialog("close");
+                    }
+                }],
+                close : function() {
+                    dialog.dialog("close");
+                    //form[0].reset();
+                }
+            });
+
+        }
+
+        function initFlyoutButtons() {
+            $('#flyout-up').click(function() {
+                window.scrollTo(0, 0);
+            });
+            $('#flyout-reset').click(function() {
+                $('#btn-reset-table').trigger('click');
+            });
+            $('#flyout-view-type').click(function() {
+                var toggleDisplay = $('#toggle-display');
+                var isList = toggleDisplay.prop('checked');
+                toggleDisplay.prop('checked', !isList);
+                
+                $('#flyout-view-type span').text(isList ? 'TILES' : 'LIST');
+                toggleDisplay.trigger('change');
+            });
+            $('#flyout-pause').click(function() {
+                paused = !paused;
+                $('#flyout-pause span').text(paused ? 'RESUME' : 'PAUSE');
+            });
+        }
+
+        function showAlertSuccess() {
+
+            $('.alert').slideDown();
+            setTimeout(function() {
+                $('.alert').slideUp();
+            }, 5000);
+        }
+
+        //==== PSE Data Poller function ==========
+
+        function tryStartPollingData() {
+        
+            setInterval(function() {
+                if (!paused) {
+                
+                var date = withPhTimezone(new Date());
+                // for now
+                var dateStr = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    
+                var isLaterOrEq0930 = date >= withPhTimezone(new Date(dateStr + " 09:30:00"));
+                var isEarlierOrEq1200 = date <= withPhTimezone(new Date(dateStr + " 12:00:00"));
+                var isLaterOrEq1330 = date >= withPhTimezone(new Date(dateStr + " 13:30:00"));
+                var isEarlierOrEq1520 = date <= withPhTimezone(new Date(dateStr + " 15:20:00"));
+                var isWeekday = date.getDay() > 0 && date.getDay() < 6;
+                if (isWeekday && ((isLaterOrEq0930 && isEarlierOrEq1200) || (isLaterOrEq1330 && isEarlierOrEq1520))) {
+    
+                        resetContextMenuLocation();
+                        $('#time-tmp').text(new Date() + " = " + withPhTimezone(new Date()));
+                        $("#jsGrid").jsGrid("loadData");
+                }      
+                }
+            }, 5000);
+        }
+
+        //==== Utility functions ==========
+
+        function withPhTimezone(localDate) {
+            var phTzOffset = 8; //Philippine timezone offset
+            var localTzOffset = localDate.getTimezoneOffset() / 60;
+            localDate.setHours(localDate.getHours() + localTzOffset + phTzOffset);
+            return localDate;
+        }
+
+        function compareNumbersWithCommas(val1, val2) {
+
+            if (val1 == "" || val1 == "DATE")
+                return -1;
+            if (val2 == "" || val2 == "DATE")
+                return 1;
+
+            var val1_copy = parseFloat(val1.replace(/\,/g, '')).toFixed(2);
+            var val2_copy = parseFloat(val2.replace(/\,/g, '')).toFixed(2);
+            return val1_copy - val2_copy;
+        }
+
+        function getQueryString() {
+            var vars = [],
+                hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        };
+
+        function sortCompanyList(list) {
+
+            list.sort(function(a, b) {
+                return a.securitySymbol.localeCompare(b.securitySymbol);
+            });
+            return list;
+        }
+
+        function getWatchlistFromCookie(queryMap) {
+
+            if (queryMap['stocks'] == undefined) {
+                return null;
+            }
+            var sortedQueryString = 'stocks=' + queryMap['stocks'].split('+').sort().join('+') + '&view=' + queryMap['view'];
+            var cookieWatchlists = $.cookie('watchlists');
+            if (cookieWatchlists == undefined) {
+                return null;
+            }
+            cookieWatchlists = JSON.parse(cookieWatchlists);
+            for (var key in cookieWatchlists) {
+                var val = cookieWatchlists[key];
+                if (sortedQueryString == val) {
+                    return key;
+                }
+            }
+            return null;
+        }
+
+    </script>
+</html>
