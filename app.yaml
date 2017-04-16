@@ -4,13 +4,13 @@ api_version: 1
 handlers:
 - url: /(.*\.css)
   mime_type: text/css
-  static_files: assets/\1
-  upload: assets/(.*\.css)
+  static_files: /assets/\1
+  upload: /assets/(.*\.css)
   
 - url: /(.*\.js)
   mime_type: text/javascript
-  static_files: assets/\1
-  upload: assets/(.*\.js)
+  static_files: /assets/\1
+  upload: /assets/(.*\.js)
   
 - url: /(.+\.php)$
   script: \1
