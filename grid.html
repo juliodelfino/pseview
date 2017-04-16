@@ -1,0 +1,198 @@
+<html>
+
+<head>
+
+    <title></title>
+ 
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid-theme.min.css" />
+    
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script type="text/javascript">
+
+        var appliedFilter = [];
+
+        $(function () {
+
+            var list = [];
+
+            var get = function () {
+                $.ajax({
+                    type: "GET",
+                    async: true,
+                    cache: false,
+                    url: "http://pse.jdelfino.com/latest.php",
+                    datacontentType: 'application/json',
+                    success: function (msg) {
+                        list = $.parseJSON(msg);
+                        list = list.filter(function (el) { return el.lastTradedPrice[0] != '-' && el.percChangeClose != ''; });
+                        
+                        $('#jsGrid').jsGrid('search');
+                        if ($('#filter-select option').length == 0) {
+                            initFilter();
+                        }
+                    },
+                    error: function(msg) {
+                        alert('error in getting data');
+                    }
+                });
+            };
+
+            var initFilter = function () {
+                $("#filter-select").select2({
+                    width: '95%'
+                });
+
+                $.each(list, function (i, item) {
+                    $('#filter-select').append($('<option>', {
+                        value: item.securitySymbol,
+                        text: item.securitySymbol
+                    }));
+                });
+
+                var filteredList;
+                if (appliedFilter.length == 0) {
+                    filteredList = list;
+                } else {
+                    $.each(list, function (i, item) {
+                        $.each(appliedFilter, function (x, f) {
+                            if (item.securitySymbol == f) {
+                                filteredList.push(item);
+                            }
+                        });
+                    });
+                }
+
+                $('#filter-button').click(function () {
+                    appliedFilter = $('#filter-select').val();
+                    get();
+                });
+            };
+
+            var getQueryString = function () {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            };
+
+            if (getQueryString()['p'] == undefined || getQueryString()['p'] == 0)
+                setInterval(get, 1000);
+            else
+                get();
+
+            var addToWatchField = function (config) {
+                jsGrid.Field.call(this, config);
+            };
+
+            addToWatchField.prototype = new jsGrid.Field({
+                onClick: function () {
+                    var onclick = "setFilter($(this).parent('td').siblings('.col-securitySymbol').text());";
+                    return onclick;
+                },
+
+                itemTemplate: function (value) {
+                    var cellContent = "<input type='button' " +
+                        "class='addWatch jsgrid-button jsgrid-insert-button' " +
+                        "onclick=" + this.onClick() + " />";
+                    return cellContent;
+                }
+            });
+
+            jsGrid.fields.addToWatchField = addToWatchField;
+
+            var stringField = function (config) {
+                jsGrid.Field.call(this, config);
+            };
+
+            stringField.prototype = new jsGrid.Field({
+                cellRenderer: function (value, item) {
+                    return "<td class='jsgrid-cell col-" + this.name + "'>" + value + "</td>";
+                }
+            });
+
+            jsGrid.fields.stringField = stringField;
+
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "95%",
+                selecting: true,
+                filtering: false,
+                sorting: true,
+                autoload: true,
+                controller: {
+                    loadData: function () {
+                        if (appliedFilter.length == 0) {
+                            filteredList = list;
+                        } else {
+                            filteredList = [];
+                            $.each(list, function (i, item) {
+                                $.each(appliedFilter, function (x, f) {
+                                    if (item.securitySymbol == f) {
+                                        filteredList.push(item);
+                                    }
+                                });
+                            });
+                        }
+                        return filteredList;
+                    }
+                },
+                fields: [
+                    { type: "addToWatchField", title: 'Watchlist', width: 5 },
+                    { name: "securitySymbol", type: "stringField", title: 'Symbol', width: 5 },
+                    { name: "lastTradedPrice", type: "number", title: 'Price', width: 5, sorter: compareNumbersWithCommas },
+	            { name: "percChangeClose", title: "Change %", width: 5, type: "number" },
+	            { name: "totalVolume", title: "Volume", type: "number", width: 5, sorter: compareNumbersWithCommas} 
+                ]
+            });
+            
+            function compareNumbersWithCommas(val1, val2) {
+	
+		if (val1 == "" || val1 == "DATE") return -1;
+		if (val2 == "" || val2 == "DATE") return 1;
+	
+		var val1_copy = parseFloat(val1.replace(/\,/g,'')).toFixed(2);
+		var val2_copy = parseFloat(val2.replace(/\,/g,'')).toFixed(2);
+		return val1_copy - val2_copy;
+	    }
+        });
+
+        function setFilter(name) {
+            var s = $('#filter-select').val();
+            s.push(name);
+            $('#filter-select').val(s);
+            $("#filter-select").select2({
+                width: '95%'
+            });
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <div>
+
+        <div class="jsGrid">
+
+            <input id="filter-button" type="button" class="jsgrid-search-mode-button jsgrid-button" style="height: 25px;width:25px" />
+
+            <select id="filter-select" multiple="multiple"></select>
+
+        </div>
+
+        <div id="jsGrid" style="padding-top:5"></div>
+
+    </div>
+
+</body>
+
+</html>

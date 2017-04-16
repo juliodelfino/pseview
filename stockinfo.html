@@ -1,0 +1,954 @@
+<html>
+    <head>
+        <title>PSE Latest Info</title>
+        <script src="https://www.google.com/jsapi"></script>
+        <script src="assets/jquery.js"></script>
+        <script src="assets/common.js"></script>
+        <link type="text/css" rel="stylesheet" href="assets/common.css" />
+
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+        <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css" />
+        <!-- This import doesn't work for Blackberry 10 browser
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        -->
+        <script src="assets/bootstrap.js"></script>
+        <link rel="stylesheet" media="all" href="assets/bootstrap.css">
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid-theme.min.css" />
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <style>
+            h3 {
+                text-align: center;
+                margin: 5px;
+            }
+
+            .container-fluid {
+                padding: 0;
+                margin: 1px;
+            }
+
+            .gain-font {
+                color: green;
+            }
+
+            .lose-font {
+                color: red;
+            }
+
+            .jsgrid {
+                overflow: visible;
+            }
+
+            .grid-view-item {
+                display: inline-block;
+                color: white;
+                width: 22%;
+                height: 80px;
+                margin: 1.5%;
+                word-wrap: break-word;
+                text-align: center;
+                background: grey;
+                background: -webkit-linear-gradient(0deg, grey, #CCC);
+                background: linear-gradient(0deg, grey, #CCC);
+                font-size: 13px;
+                padding-top: 2px;
+            }
+
+            .gv-symbol {
+                font-weight: bolder;
+                font-size: 16px;
+            }
+
+            .grid-view-table .gain-font {
+                background: green;
+                background: -webkit-linear-gradient(0deg, green, #A6E3D5);
+                background: linear-gradient(0deg, green, #A6E3D5);
+            }
+
+            .grid-view-table .lose-font {
+                background: red;
+                background: -webkit-linear-gradient(0deg, red, #E3A6B4);
+                background: linear-gradient(0deg, red, #E3A6B4);
+            }
+
+            .stock-menu {
+                float: right;
+                /* background: url("/images/more-btn.jpg"); */
+                /* background-size: 16px; */
+                width: 20px;
+            }
+
+            .jsgrid-grid-body {
+                min-height: 50%
+            }
+
+            .label {
+                color: #999;
+                font-weight: 300;
+            }
+
+            .label-main {
+                width: 50px;
+                display: inline-block;
+                text-align: left;
+            }
+
+            .value-main {
+                width: 80px;
+                font-size: 20px;
+            }
+
+            .value {
+                display: block;
+                padding-bottom: 8px;
+                padding-left: 5px;
+                font-size: 18px;
+                font-weight: normal;
+            }
+
+            .jsgrid-header-cell {
+                font-size: 12px;
+                color: #777;
+            }
+
+            .jsgrid-cell {
+                font-size: 10px;
+            }
+
+            /* Bootstrap overrides */
+            .nav-tabs > li > a {
+                padding: 5px 15px;
+                font-size: 10px;
+            }
+
+            hr {
+                margin-top: 0px;
+                margin-bottom: 10px;
+            }
+
+            .tab-pane {
+                padding-top: 10px;
+            }
+
+            #company-description {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            /* Google charts */
+            .btn-group {
+                width: 100%;
+                text-align: center;
+            }
+
+            .btn-group > .btn {
+                float: none;
+            }
+
+            .btn-primary {
+                background-color: white;
+                color: #337ab7;
+            }
+
+            #stock-badges {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .stock-badge {
+                margin-right: 3px;
+                background-color: #eee;
+            }
+
+            #stock-symbol-input {
+
+                float: left;
+                position: fixed;
+                font-size: 40px;
+                width: 100px;
+                text-transform: uppercase;
+                line-height: 40px;
+                border: none;
+                padding: 0;
+                margin: 0 0 0 8px;
+                display: none;
+            }
+
+        </style>
+
+        <div class="container-fluid">
+
+            <div id="header-bar" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+            <div class="main">
+
+                <div id="stock-badges" style="white-space: nowrap; overflow-x: scroll; margin-top: 1px;">
+                    <input id="stock-symbol-input" type="text" maxlength="5" />
+                </div>
+
+                <table width="100%">
+                    <tr>
+                        <td width="100%" style="padding-left: 5px"></td>
+                    </tr>
+                    <tr>
+                        <td><span id="stock-name" class="text-muted" style="font-size: 16px">--</span>
+                        <br/>
+                        <span id="stock-latest" style="font-size: 48px; width: 100%">--</span></td>
+                        <td style="font-size: 20px; vertical-align: middle; width: 140px"><span class="label label-main">DIFF</span><span id="stock-diff" class="value-main">--</span>
+                        <br/>
+                        <span class="label label-main">CHG</span><span id="stock-change" class="value-main">--</span></td>
+                    </tr>
+                </table>
+                <p class="text-muted">
+                    As of <span id="stock-datetime">--</span>
+                </p>
+
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab"  href="#stock-info-tab">STOCK INFO</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab"  href="#company-info-tab">COMPANY INFO</a>
+                    </li>
+                    <!--
+                    <li>
+                    <a data-toggle="tab"  href="#bid-ask-tab">BID & ASK</a>
+                    </li>
+                    <li>
+                    <a data-toggle="tab"  href="#trades-tab">TRADES</a>
+                    </li>
+                    -->
+                    <li>
+                        <a data-toggle="tab"  href="#chart-tab">CHART</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="stock-info-tab" class="tab-pane fade in active">
+
+                        <table width="100%">
+                            <tr>
+                                <td><span class="label">PREV</span><span id="stock-prev" class="value">--</span><span class="label">OPEN</span><span id="stock-open" class="value">--</span></td>
+                                <td><span class="label">HIGH</span><span id="stock-high" class="value">--</span><span class="label">LOW</span><span id="stock-low" class="value">--</span></td>
+                                <td><span class="label">VOLUME</span><span id="stock-volume" class="value">--</span><span class="label">VALUE</span><span id="stock-value" class="value">--</span></td>
+                            </tr>
+                        </table>
+                        <hr />
+                        <table width="100%">
+                            <tr>
+                                <td><span class="label">52-WEEK HIGH</span><span id="stock-52wk-high" class="value">--</span><span class="label">52-WEEK LOW</span><span id="stock-52wk-low" class="value">--</span><!-- <span class="label">RANGE</span><span id="stock-range" class="value">--</span> --><span class="label">BLOCKS</span><span id="stock-blocks" class="value">--</span></td>
+                                <td><span class="label">TRADES</span><span id="stock-total-trades" class="value">--</span><span class="label">CROSS</span><span id="stock-cross" class="value">--</span><!-- <span class="label">PAR VALUE</span><span id="stock-par-value" class="value">--</span>
+                                <span class="label">DYNAMIC FLOOR</span><span id="stock-dynamic-floor" class="value">--</span>
+                                <span class="label">DYNAMIC CEILING</span><span id="stock-dynamic-ceiling" class="value">--</span> --><span class="label">STATUS</span><span id="stock-status" class="value">--</span></td>
+                            </tr>
+                        </table>
+                        <hr />
+                    </div>
+
+                    <div id="company-info-tab" class="tab-pane fade">
+                        <table width="100%">
+                            <tr>
+                                <!-- <td valign="top"><span class="label">COMPANY ID</span><span id="company-id" class="value">--</span></td> -->
+                                <td><span class="label">COMPANY NAME</span><span id="company-name" class="value">--</span></td>
+                            </tr>
+                            <tr>
+                                <!-- <td valign="top"><span class="label">SECURITY ID</span><span id="symbol-id" class="value">--</span></td> -->
+                                <td><span class="label">SECURITY NAME</span><span id="security-name" class="value">--</span></td>
+                            </tr>
+                        </table>
+                        <table width="100%">
+                            <tr>
+                                <td><span class="label">LISTING DATE</span><span id="listing-date" class="value">--</span></td>
+                                <td><span class="label">SECURITY TYPE</span><span id="security-type" class="value">--</span></td>
+                                <!-- <td><span class="label">SUB-SECTOR ID</span><span id="subsector-name" class="value">--</span></td> -->
+                            </tr>
+                        </table>
+                        <span class="label">COMPANY DESCRIPTION</span>
+                        <p id="company-description" class="value">
+                            --
+                        </p>
+                        <hr />
+                    </div>
+                    <!--        <div id="bid-ask-tab" class="tab-pane fade">
+
+                    <div id="bidAskGrid"></div>
+                    </div>
+                    <div id="trades-tab" class="tab-pane fade">
+
+                    <div id="tradesGrid"></div>
+                    </div>
+                    -->
+                    <div id="chart-tab" class="tab-pane fade">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-sm btn-primary">
+                                <input type="radio" name="chart-type" id="1_DAY" autocomplete="off">
+                                DAY </label>
+                            <label class="btn btn-sm btn-primary active">
+                                <input type="radio" name="chart-type" id="1_MONTH" autocomplete="off" checked>
+                                MONTH </label>
+                            <label class="btn btn-sm btn-primary">
+                                <input type="radio" name="chart-type" id="1_YEAR" autocomplete="off">
+                                YEAR </label>
+                            <label class="btn btn-sm btn-primary">
+                                <input type="radio" name="chart-type" id="5_YEAR" autocomplete="off">
+                                5-YEAR </label>
+                            <div style="width: 24px; display: inline-block">
+                                <img id="load-icon" src="/images/load-icon.gif" style="display: none;" />
+                            </div>
+                        </div>
+                        <div id="chart_div" style="width: 100%"></div>
+                        <div id="vol_div" style="width: 100%"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+    <script>
+        var stockSymbols = [];
+        var dailySummary = {};
+        var timeAndSales = [];
+        var bidAndAsk = [];
+        var selectedStockSymbol = null;
+        var companyInfoMap = [];
+        var paused = false;
+
+        $(document).ready(function() {
+
+            initJsGrids();
+            var onDone = function() {
+                initEventHandlers();
+                getDailySummary();
+                queryMap = getQueryString();
+                startGetStockInfo(queryMap['code']);
+                tryStartPollingData();
+                initChart();
+            };
+            initCompanyList(onDone);
+        });
+
+        function initCompanyList(onDoneFunc) {
+
+            $.ajax({
+                type : "GET",
+                url : "/companylist.php",
+                dataType : "JSON"
+            }).done(function(data) {
+
+                $.each(data.records, function(i, item) {
+                    stockSymbols.push(item.securitySymbol);
+                    companyInfoMap[item.securitySymbol] = item;
+                });
+                stockSymbols.sort();
+                $.each(stockSymbols, function(i, item) {
+                    $('#stock-badges').append('<span id="stock-badge-' + item + '" class="badge stock-badge" style="font-size: 40px; font-weight: normal">' + item + '</span>');
+                });
+
+                onDoneFunc();
+
+            });
+        }
+
+        function initEventHandlers() {
+
+            $('#stock-symbol-input').keyup(function(e) {
+                if (e.keyCode == 13) {
+                    $(this).hide();
+                    var text = $(this).val().toUpperCase();
+                    if (searchStockSymbol(text) != undefined) {
+                        resetPage();
+                        startGetStockInfo(text);
+                    }
+
+                } else {
+                    scrollToBadge(searchStockSymbol($(this).val()));
+                }
+            });
+
+            $('#stock-symbol-input').click(function() {
+                var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (iOS) {
+                    $(this).get(0).setSelectionRange(0, $(this).val().length);
+                } else {
+                    $(this).select();
+                }
+            });
+
+            $('#stock-symbol-input').blur(function() {
+                $(this).hide();
+            });
+
+            $('.stock-badge').click(function() {
+                var symbol = $(this).text();
+                if (symbol === selectedStockSymbol) {
+
+                    $('#stock-symbol-input').show();
+                    $('#stock-symbol-input').trigger('click');
+                    return;
+                }
+                
+                //reset the color of the previously selected stock symbol
+                if (selectedStockSymbol != null) {
+                    $('#stock-badge-' + selectedStockSymbol).css('background-color', '#eee');
+                }
+                
+                $('#stock-symbol-input').val(symbol);
+                $(this).css('background-color', '#777');
+                scrollToBadge(symbol);
+
+                getLatestStockInfo(symbol);
+                populateCompanyInfoFields(symbol);
+                drawChart();
+
+            });
+        }
+
+        function scrollToBadge(stockSymbol) {
+            var scrollArea = $('#stock-badges');
+            var badge = $('#stock-badge-' + stockSymbol);
+            var leftOffset = badge.offset().left - scrollArea.offset().left + scrollArea.scrollLeft();
+            scrollArea.animate({
+                scrollLeft : leftOffset
+            }, 500);
+        }
+
+        function resetPage() {
+            $('#stock-name').text("--");
+
+            $('#stock-datetime').text("--");
+            $('#stock-latest').text("--");
+            $('#stock-diff').text("--");
+            $('#stock-change').text("--");
+            $('#stock-prev').text("--");
+            $('#stock-open').text("--");
+            $('#stock-high').text("--");
+            $('#stock-low').text("--");
+            $('#stock-volume').text("--");
+            $('#stock-value').text("--");
+            $('#stock-52wk-high').text("--");
+            $('#stock-52wk-low').text("--");
+            $('#stock-range').text("--");
+            $('#stock-cross').text("--");
+            $('#stock-blocks').text("--");
+            $('#stock-total-trades').text("--");
+            $('#stock-par-value').text("--");
+            $('#stock-dynamic-floor').text("--");
+            $('#stock-dynamic-ceiling').text("--");
+            $('#stock-status').text("--");
+
+            resetCompanyInfoFields();
+        }
+
+        function getDailySummary() {
+
+            $.ajax({
+                type : "GET",
+                url : "http://pse.jdelfino.com/summary.php",
+                dataType : "JSON"
+            }).done(function(data) {
+                dailySummary = data.records[0];
+                $('#stock-datetime').text(formatDate(dailySummary.tradingTime));
+            });
+        }
+
+        function formatDate(pseDate) {
+            var datetimeTokens = pseDate.split(" ");
+            var dateTokens = datetimeTokens[0].split("-");
+            var timeTokens = datetimeTokens[1].split(":");
+
+            var d = new Date(dateTokens[0], dateTokens[1] - 1, dateTokens[2], timeTokens[0], timeTokens[1], 0, 0);
+            return $.format.date(d, "MM/dd/yyyy hh:mm a") + " (PHT)";
+        }
+
+        function startGetStockInfo(stockSymbol) {
+
+            $('#stock-badge-' + stockSymbol).trigger('click');
+        }
+
+        function getLatestStockInfo(stockSymbol) {
+
+            selectedStockSymbol = stockSymbol;
+
+            $.ajax({
+                type : "GET",
+                url : "http://pse.jdelfino.com/stockinfo.php?code=" + stockSymbol,
+                dataType : "JSON"
+            }).done(function(data) {
+
+                var stockInfo = data.records[0];
+                // $('#stock-datetime').text(stockInfo["@attributes"].logupdate + " (PHT)");
+                $stockDiff = roundOff(stockInfo.headerChangeClose);
+                $('#stock-latest').text(reformat(stockInfo.headerLastTradePrice));
+                $('#stock-diff').text($stockDiff);
+                $('#stock-change').text(roundOff(stockInfo.headerPercChangeClose));
+                $('#stock-prev').text(reformat(stockInfo.headerSqPrevious));
+                $('#stock-open').text(reformat(stockInfo.headerSqOpen));
+                $('#stock-high').text(reformat(stockInfo.headerSqHigh));
+                $('#stock-low').text(reformat(stockInfo.headerSqLow));
+                $('#stock-volume').text(reformat(stockInfo.headerTotalVolume));
+                $('#stock-value').text(reformat(stockInfo.headerTotalValue));
+                $('#stock-52wk-high').text(reformat(stockInfo.headerFiftyTwoWeekHigh));
+                $('#stock-52wk-low').text(reformat(stockInfo.headerFiftyTwoWeekLow));
+
+                var selectorsForFontUpdate = '#stock-name, #stock-latest, #stock-diff, #stock-change';
+                $(selectorsForFontUpdate).removeClass('gain-font lose-font');
+                var selectedBadge = $('#stock-badge-' + selectedStockSymbol);
+                selectedBadge.css('background-color', '#777');
+                if ($stockDiff > 0) {
+                    $(selectorsForFontUpdate).addClass('gain-font');
+                    selectedBadge.css('background-color', 'green');
+                } else if ($stockDiff < 0) {
+                    $(selectorsForFontUpdate).addClass('lose-font');
+                    selectedBadge.css('background-color', 'red');
+                }
+
+            });
+
+        }
+
+        function roundOff(strNum) {
+            return parseFloat(strNum.replace(/\,/g, '')).toFixed(2);
+        }
+
+        function reformat(strNum) {
+            return formatCommas(roundOff(strNum));
+        }
+
+        function populateCompanyInfoFields(stock) {
+
+            ci = companyInfoMap[stock];
+            $('#security-name').text(ci.securityName);
+            $('#security-type').text(ci.securityType);
+            $('#subsector-name').text(ci.subsectorName);
+            $('#symbol-id').text(ci.securitySymbolId);
+            $('#company-name').text(ci.companyName);
+            $('#stock-name').text(ci.companyName);
+            $('#company-id').text(ci.companyId);
+
+            var tokens = ci.listingDate.split(' ')[0].split('-');
+            var listingDate = new Date(tokens[0], tokens[1] - 1, tokens[2]);
+            $('#listing-date').text($.format.date(listingDate, 'MMM dd, yyyy'));
+
+            $.ajax({
+                type : "GET",
+                url : "/companydesc.php?id=" + ci.companyId + "&code=" + stock
+            }).done(function(data) {
+                $('#company-description').html(data);
+            });
+
+        }
+
+        function resetCompanyInfoFields() {
+
+            $('#security-name').text('--');
+            $('#security-type').text('--');
+            $('#subsector-name').text('--');
+            $('#symbol-id').text('--');
+            $('#company-name').text('--');
+            $('#company-id').text('--');
+            $('#listing-date').text('--');
+        }
+
+        function initJsGrids() {
+            $("#bidAskGrid").jsGrid({
+                height : "auto",
+                width : "100%",
+                selecting : true,
+                sorting : false,
+                autoload : true,
+                loadIndication : false,
+                forceFit : true,
+                controller : {
+                    loadData : function() {
+
+                        return bidAndAsk;
+                    }
+                },
+
+                fields : [{
+                    name : "bidOrders",
+                    title : "# BID",
+                    type : "number",
+                    width : 39
+                }, {
+                    name : "bidVolume",
+                    title : "BID VOL",
+                    type : "number",
+                    width : 80
+                }, {
+                    name : "bidPrice",
+                    title : "BID PRICE",
+                    type : "number",
+                    width : 67
+                }, {
+                    name : "askPrice",
+                    title : "ASK PRICE",
+                    type : "number",
+                    width : 67
+                }, {
+                    name : "askVolume",
+                    title : "ASK VOL",
+                    type : "number",
+                    width : 80
+                }, {
+                    name : "askOrders",
+                    title : "# ASK",
+                    type : "number",
+                    width : 39
+                }]
+            });
+
+            $("#tradesGrid").jsGrid({
+                height : "auto",
+                width : "100%",
+                selecting : true,
+                sorting : false,
+                autoload : true,
+                loadIndication : false,
+                controller : {
+                    loadData : function() {
+
+                        $.each(timeAndSales, function(idx, value) {
+                            var totalValue = value.price.replace(/\,/g, '') * value.volume.replace(/\,/g, '');
+                            value["value"] = formatCommas(totalValue.toFixed(2));
+                        });
+                        return timeAndSales;
+                    }
+                },
+
+                fields : [{
+                    name : "time",
+                    title : "TIME",
+                    type : "text",
+                    width : 62
+                }, {
+                    name : "price",
+                    title : "PRICE",
+                    type : "number",
+                    width : 55
+                }, {
+                    name : "volume",
+                    title : "VOLUME",
+                    type : "number",
+                    width : 62
+                }, {
+                    name : "value",
+                    title : "VALUE",
+                    type : "number",
+                    width : 70
+                }, {
+                    name : "buyer",
+                    title : "BUYER",
+                    type : "text",
+                    width : 62
+                }, {
+                    name : "seller",
+                    title : "SELLER",
+                    type : "text",
+                    width : 62
+                }]
+            });
+        }
+
+        function extractBidAskList(stockInfo) {
+
+            var bidAskList = [];
+            for (var i in stockInfo.bid.orders) {
+                var bidAsk = {};
+                bidAsk["bidOrders"] = stockInfo.bid.orders[i];
+                bidAsk["bidVolume"] = stockInfo.bid.vol[i];
+                bidAsk["bidPrice"] = stockInfo.bid.price[i];
+                bidAsk["askOrders"] = stockInfo.ask.orders[i];
+                bidAsk["askVolume"] = stockInfo.ask.vol[i];
+                bidAsk["askPrice"] = stockInfo.ask.price[i];
+                bidAskList.push(bidAsk);
+            }
+            return bidAskList;
+        }
+
+        //==== PSE Data Poller function ==========
+
+        function tryStartPollingData() {
+
+            setInterval(function() {
+                if (!paused) {
+
+                    var date = withPhTimezone(new Date());
+                    // for now
+                    var dateStr = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+                    var isLaterOrEq0930 = date >= withPhTimezone(new Date(dateStr + " 09:30:00"));
+                    var isEarlierOrEq1200 = date <= withPhTimezone(new Date(dateStr + " 12:00:00"));
+                    var isLaterOrEq1330 = date >= withPhTimezone(new Date(dateStr + " 13:30:00"));
+                    var isEarlierOrEq1520 = date <= withPhTimezone(new Date(dateStr + " 15:30:00"));
+                    var isWeekday = date.getDay() > 0 && date.getDay() < 6;
+                    if (isWeekday && ((isLaterOrEq0930 && isEarlierOrEq1200) || (isLaterOrEq1330 && isEarlierOrEq1520))) {
+
+                        getLatestStockInfo(selectedStockSymbol);
+                    }
+                }
+            }, 5000);
+        }
+
+        function withPhTimezone(localDate) {
+            var phTzOffset = 8;
+            //Philippine timezone offset
+            var localTzOffset = localDate.getTimezoneOffset() / 60;
+            localDate.setHours(localDate.getHours() + localTzOffset + phTzOffset);
+            return localDate;
+        }
+
+        //==== PSE Charts =========
+
+        var chart = null;
+        var volChart = null;
+        var chartData = null;
+        var volData = null;
+        var chartType = '1_MONTH';
+        google.charts.load('current', {
+            'packages' : ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function initChart() {
+
+            $('input[type=radio][name=chart-type]').change(function() {
+                chartType = this.id;
+                drawChart();
+            });
+        }
+
+        function drawChart() {
+
+            $('#load-icon').show();
+            $.ajax({
+                type : "GET",
+                url : "http://pse.jdelfino.com/chart.php?code=" + selectedStockSymbol + "&type=" + chartType,
+                dataType : "JSON"
+            }).done(function(data) {
+
+                var priceInfo = data.price_info[0];
+                var rawData = [['Date', 'Value']];
+
+                $.each(priceInfo.price, function(i, val) {
+                    rawData.push([chartType == '1_DAY' ? new Date(val.dateTime) : makeDate(val.date), val.value]);
+                });
+
+                chartData = google.visualization.arrayToDataTable(rawData);
+
+                chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                chart.draw(chartData, getChartOptions());
+
+                //For volume chart
+
+                var volInfo = data.volume_info;
+                var rawVolData = [['Date', 'Volume']];
+
+                $.each(volInfo.price, function(i, val) {
+                    rawVolData.push([chartType == '1_DAY' ? new Date(val.dateTime) : makeDate(val.date), val.value]);
+                });
+
+                volData = google.visualization.arrayToDataTable(rawVolData);
+
+                volChart = new google.visualization.AreaChart(document.getElementById('vol_div'));
+                volChart.draw(volData, getVolChartOptions());
+
+                if (document.addEventListener) {
+                    window.addEventListener('resize', resizeChart);
+                } else if (document.attachEvent) {
+                    window.attachEvent('onresize', resizeChart);
+                } else {
+                    window.resize = resizeChart;
+                }
+
+                tryInitTouchstart();
+
+                $('#load-icon').hide();
+            });
+        }
+
+        var isTouchInitialized = false;
+        function tryInitTouchstart() {
+
+            if (!isTouchInitialized) {
+                $(document).on('touchstart', '#chart_div', onTouch);
+                $(document).on('touchmove', '#chart_div', onTouch);
+                $(document).on('touchstart', '#vol_div', onTouch);
+                $(document).on('touchmove', '#vol_div', onTouch);
+                $('#chart_div').mousemove(onMouseMove);
+                $('#vol_div').mousemove(onMouseMove);
+
+                isTouchInitialized = true;
+            }
+        }
+
+        function onTouch(e) {
+            var xPos = e.originalEvent.touches[0].pageX;
+            updateSelectedPoints(xPos);
+        }
+
+        function onMouseMove(e) {
+            var xPos = e.pageX;
+            updateSelectedPoints(xPos);
+        }
+
+        function updateSelectedPoints(xPos) {
+            // determine the x-position on chart_div
+            // $('#stock-latest').text(xPos);
+            var selectedPoint = [{
+                "row" : getRow(xPos),
+                "column" : 1
+            }];
+            chart.setSelection(selectedPoint);
+            volChart.setSelection(selectedPoint);
+        }
+
+        function getRow(xPos) {
+
+            var leftOffset = 45;
+            var rectWidth = ($(document).width() * .85) + 40 - leftOffset;
+            var _xPos = xPos - leftOffset;
+            var percent = _xPos / rectWidth;
+            return Math.round(chartData.getNumberOfRows() * percent);
+        }
+
+        function makeDate(dateStr) {
+            var tokens = dateStr.split('-');
+            //'new Date(dateStr)' provides a timestamp while 'new Date(y, m, d)' doesnt
+            return new Date(tokens[0], tokens[1] - 1, tokens[2]);
+        }
+
+        function resizeChart() {
+            chart.draw(chartData, getChartOptions());
+            volChart.draw(volData, getVolChartOptions());
+        }
+
+        function getChartOptions() {
+            return {
+                chartArea : {
+                    top : 20,
+                    left : 45,
+                    width : '85%',
+                    height : '75%'
+                },
+                lineWidth : 1,
+                legend : 'none',
+                crosshair : {
+                    trigger : 'both',
+                    orientation : 'vertical'
+                },
+                width : $(document).width() - 5,
+                tooltip : {
+                    trigger : 'selection'
+                },
+                colors : ['#428bca']
+            };
+        }
+
+        function getVolChartOptions() {
+            return {
+                chartArea : {
+                    top : 20,
+                    left : 45,
+                    width : '85%',
+                    height : '75%'
+                },
+                title : 'Volume',
+                lineWidth : 1,
+                vAxis : {
+                    format : 'short'
+                },
+                legend : 'none',
+                crosshair : {
+                    trigger : 'both',
+                    orientation : 'vertical'
+                },
+                width : $(document).width() - 5,
+                tooltip : {
+                    trigger : 'selection'
+                },
+                colors : ['#428bca']
+            };
+        }
+
+        function searchStockSymbol(searchTxt) {
+            searchTxt = searchTxt.toUpperCase();
+            return stockSymbols.find(function(curr) {
+                return curr.startsWith(searchTxt);
+            }, searchTxt);
+        }
+
+        /* Deprecated; already replaced with getLatestStockInfo() which retrieves from PSE */
+        function getLatestStockInfoFromBpi(stockSymbol) {
+
+            selectedStockSymbol = stockSymbol;
+            $('#stock-symbol').text(stockSymbol);
+
+            $.ajax({
+                type : "GET",
+                url : "http://pse.jdelfino.com/stockinfo.php?code=" + stockSymbol,
+                dataType : "JSON"
+            }).done(function(data) {
+
+                $('#stock-name').text(data.security.secname);
+
+                var stockInfo = data.security.stockinfo;
+                $('#stock-datetime').text(stockInfo["@attributes"].logupdate + " (PHT)");
+                $('#stock-latest').text(stockInfo.last);
+                $('#stock-diff').text(stockInfo.diff);
+                $('#stock-change').text(stockInfo.change);
+                $('#stock-prev').text(stockInfo.prevclose);
+                $('#stock-open').text(stockInfo.open);
+                $('#stock-high').text(stockInfo.high);
+                $('#stock-low').text(stockInfo.low);
+                $('#stock-volume').text(stockInfo.volume);
+                $('#stock-value').text(stockInfo.value);
+                $('#stock-52wk-high').text(stockInfo.wikhi52);
+                $('#stock-52wk-low').text(stockInfo.wiklo52);
+                $('#stock-range').text(stockInfo.range);
+                $('#stock-cross').text(stockInfo.cross);
+                $('#stock-blocks').text(JSON.stringify(stockInfo.blocks));
+                $('#stock-total-trades').text(stockInfo.totaltrades);
+                $('#stock-par-value').text(stockInfo.parvalue);
+                $('#stock-dynamic-floor').text(stockInfo.dynamicfloor);
+                $('#stock-dynamic-ceiling').text(stockInfo.dynamicceiling);
+                $('#stock-status').text(stockInfo.status);
+
+                var selectorsForFontUpdate = '#stock-name, #stock-latest, #stock-diff, #stock-change';
+                $(selectorsForFontUpdate).removeClass('gain-font lose-font');
+                $('#stock-symbol').css('background-color', '#777');
+                if (stockInfo.diff > 0) {
+                    $(selectorsForFontUpdate).addClass('gain-font');
+                    $('#stock-symbol').css('background-color', 'green');
+                } else if (stockInfo.diff < 0) {
+                    $(selectorsForFontUpdate).addClass('lose-font');
+                    $('#stock-symbol').css('background-color', 'red');
+                }
+
+                bidAndAsk = extractBidAskList(stockInfo);
+                $('#bidAskGrid').jsGrid('render');
+
+                timeAndSales = stockInfo.timeNsales;
+                $('#tradesGrid').jsGrid('render');
+            });
+
+        }
+
+    </script>
+</html>

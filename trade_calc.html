@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PSE Trade Calculator</title>
+		<script src="https://www.google.com/jsapi"></script>
+		<script src="assets/jquery.js"></script>
+		<script src="assets/bootstrap.js"></script>
+		<script src="assets/common.js"></script>
+
+		<link rel="stylesheet" media="all" href="assets/bootstrap.css">
+		<link type="text/css" rel="stylesheet" href="assets/common.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	</head>
+	<body>
+		<style>
+			h3 {
+				text-align: center;
+				margin: 5px;
+			}
+
+			label {
+				width: 40%;
+				font-size: 10px;
+				margin: 0;
+			}
+			input {
+				width: 50%;
+				padding-top: 1px;
+				padding-bottom: 1px;
+			}
+			
+			.num {
+				text-align: right;
+			}
+
+			.calc-div {
+				font-size: smaller;
+				text-align: left;
+				padding: 2px;
+				padding-top: 5px;
+			}
+			
+			.calc-subdiv {
+				border: solid 1px grey; 
+				padding: 0 5px;
+				margin-top: 5px;
+			}
+			
+			.container-fluid {
+				padding: 0;
+				margin: 1px;
+			}
+			
+			.readonly-num {
+				border: none;
+				text-align: right;
+			}
+			
+			#final-info label, #final-info input {
+				font-size: 22px;
+				font-weight: bold;
+			}
+			
+			.gain-font {
+				color: green;
+			}
+			
+			.lose-font {
+				color: red;
+			}
+			
+			#rec-net-profit-div {
+				display: none;
+			}
+			
+			#rec-net-profit-div label,#rec-net-profit-div input {
+				font-size: 12px;
+			}
+
+		</style>
+
+		<div class="container-fluid">
+			<div id="header-bar" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+			
+			<div class="col-xs-6 calc-div">
+
+				<label>COMM RATE</label>
+				<input id="comm-rate" class="num" type="text" value="0.0025" />
+				<div class="calc-subdiv">
+					<h3>BUY</h3>
+					<p>
+						<label>STOCK</label>
+						<input id="buy-stock" type="text" maxlength="5" style="text-transform: uppercase" />
+					</p>
+					<p>
+						<label>QTY</label>
+						<input id="buy-qty" class="num" type="number" min="1" max="99999999" />
+					</p>
+					<p>
+						<label>PRICE</label>
+						<input id="buy-price" class="num" type="number" min="1" max="99999999" />
+					</p>
+					<p>
+						<label>Buy Gross</label>
+						<input id="buy-gross" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>Buy Comm</label>
+						<input id="buy-comm" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>VAT</label>
+						<input id="buy-vat" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>SCCP</label>
+						<input id="buy-sccp" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label style="font-size: 8px">Transaction Fee</label>
+						<input id="buy-txfee" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p><label style="padding-bottom: 2px">&nbsp;</label></p>
+					<p>
+						<label>Total Charges</label>
+						<input id="buy-totalcharges" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>Net</label>
+						<input id="buy-net" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+				</div>
+			</div>
+			<div class="col-xs-6 calc-div">
+
+				<label>MIN COMM</label>
+				<input id="min-comm" class="num" type="text" value="20.00" />
+				<div class="calc-subdiv">
+					<h3>SELL</h3>
+					<p>
+						<label>STOCK</label>
+						<input id="sell-stock" type="text" maxlength="5" style="text-transform: uppercase" />
+					</p>
+					<p>
+						<label>QTY</label>
+						<input id="sell-qty" class="num" type="number" min="1" max="99999999" />
+					</p>
+					<p>
+						<label>PRICE</label>
+						<input id="sell-price" class="num" type="number" min="1" max="99999999" />
+					</p>
+					<p>
+						<label>Sell Gross</label>
+						<input id="sell-gross" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>Sell Comm</label>
+						<input id="sell-comm" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>VAT</label>
+						<input id="sell-vat" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>SCCP</label>
+						<input id="sell-sccp" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label style="font-size: 8px">Transaction Fee</label>
+						<input id="sell-txfee" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>Sales Tax</label>
+						<input id="sell-salestax" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>Total Charges</label>
+						<input id="sell-totalcharges" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+					<p>
+						<label>Net</label>
+						<input id="sell-net" class="readonly-num" type="text" tabIndex="-1" readonly value="--" />
+					</p>
+				</div>
+			</div>
+		</div>
+		
+		<div id="final-info" class="container-fluid">
+			<div>
+				<label>NET PROFIT</label>
+				<input id="net-profit" class="num" type="text" tabIndex="-1" value="--" />
+			</div>
+			<div id="rec-net-profit-div">
+				<label>Recomputed NET PROFIT</label>
+				<input id="rec-net-profit" class="readonly-num" type="text" tabIndex="-1" value="--" />
+				
+				<div id="rec-info" class="alert alert-info" style="font-size: 9px; padding: 5px; margin: 0;">
+				  <span>Net Profit is recomputed since Selling Price is rounded off to two decimal places.</span>
+	          	  <a href="#" id="close-notif" style="float: right">&times;</a>
+				</div>
+			</div>
+			<div>
+				<label>% GAIN</label>
+				<input id="gain" class="readonly-num" type="text" tabIndex="-1" readonly value="--" /><span>%</span>
+			</div>
+		</div>
+	</body>
+	<script>
+
+var PCDval = 0.00005;
+var vat = 0.12;
+var salestaxinterest = 0.005;
+var SCCP = 0.0001;
+//var decimal = 5;
+var decimal = 4;
+var decimalMajor = 2;
+	
+$(document).ready(function() {
+	$('#buy-stock').keyup(function(){
+		$('#sell-stock').val($(this).val());
+	});
+	$('#sell-stock').keyup(function(){
+		$('#buy-stock').val($(this).val());
+	});
+	
+	$('#buy-qty').keyup(function(){
+		$('#sell-qty').val($(this).val());
+		tryCompute();
+	});
+	$('#sell-qty').keyup(function(){
+		$('#buy-qty').val($(this).val());
+		tryCompute();
+	});
+	
+	$('#buy-price').keyup(tryCompute);
+	$('#sell-price').keyup(tryCompute);
+	
+	$("#net-profit").keyup(computeSellingPrice);
+	
+	$('#close-notif').click(function(){
+		$('#rec-info').hide();
+	});
+	
+	
+	function tryCompute() {
+		var buyQty = $('#buy-qty').val();
+		var sellQty = $('#sell-qty').val();
+		var buyPrice = $('#buy-price').val();
+		var sellPrice = $('#sell-price').val();
+		if (buyQty > 0 && buyPrice > 0) {
+			computeBuyInfo();
+		} else {
+			resetBuyInfo();
+		}
+		if (sellQty > 0 && sellPrice > 0) {
+			computeSellInfo();
+		} else {
+			resetSellInfo();
+		}	
+		
+		$('#rec-net-profit-div').hide();
+		computeNetInfo();
+	}
+
+	function computeBuyInfo() {
+		var commRate = parseFloat($('#comm-rate').val());
+		var minComm = parseFloat($('#min-comm').val());
+		var qty = $('#buy-qty').val();
+		var buyPrice = $('#buy-price').val();
+		
+		var buyGross = qty * buyPrice;
+		var buyComm = buyGross * commRate;
+		if (buyComm <= minComm) {
+			buyComm = minComm;
+		}
+		var buyPCD = PCDval * buyGross;
+		var buyVat = vat * buyComm;
+		var buySCCP = SCCP * buyGross;
+		var buyTotalCharges = buyComm + buyVat + buySCCP + buyPCD;
+		var buyNet = buyGross + buyTotalCharges;
+		
+		$('#buy-gross').val(formatCommas(buyGross.toFixed(decimalMajor)));
+		$('#buy-comm').val(buyComm.toFixed(decimal));
+		$('#buy-vat').val(buyVat.toFixed(decimal));
+		$('#buy-sccp').val(buySCCP.toFixed(decimal));
+		$('#buy-txfee').val(buyPCD.toFixed(decimal));
+		$('#buy-totalcharges').val(formatCommas(buyTotalCharges.toFixed(decimalMajor)));
+		$('#buy-net').val(formatCommas(buyNet.toFixed(decimalMajor)));
+	}
+	
+	function computeSellInfo() {
+		var commRate = parseFloat($('#comm-rate').val());
+		var minComm = parseFloat($('#min-comm').val());
+		var qty = $('#sell-qty').val();
+		var sellPrice = $('#sell-price').val();
+		
+		var sellGross = qty * sellPrice;
+		var sellComm = sellGross * commRate;
+		if (sellComm <= minComm) {
+			sellComm = minComm;
+		}
+		var sellPCD = PCDval * sellGross;
+		var sellVat = vat * sellComm;
+		var sellSCCP = SCCP * sellGross;
+		var salesTax = salestaxinterest * sellGross;
+		var sellTotalCharges = sellComm + sellVat + sellSCCP + salesTax + sellPCD;
+		var sellNet = sellGross - sellTotalCharges;
+		
+		$('#sell-gross').val(formatCommas(sellGross.toFixed(decimalMajor)));
+		$('#sell-comm').val(sellComm.toFixed(decimal));
+		$('#sell-vat').val(sellVat.toFixed(decimal));
+		$('#sell-sccp').val(sellSCCP.toFixed(decimal));
+		$('#sell-txfee').val(sellPCD.toFixed(decimal));
+		$('#sell-salestax').val(salesTax.toFixed(decimal));
+		$('#sell-totalcharges').val(formatCommas(sellTotalCharges.toFixed(decimalMajor)));
+		$('#sell-net').val(formatCommas(sellNet.toFixed(decimalMajor)));
+	}
+	
+	function computeNetInfo(customNetProfit) {
+		var buyNet = $('#buy-net').val().replace(/\,/g,'');
+		var sellNet = $('#sell-net').val().replace(/\,/g,'');
+		var netProfit = 0;
+		var gain = 0;
+		if (buyNet > 0 && sellNet > 0) {
+			netProfit = sellNet - buyNet;
+			gain = netProfit/buyNet * 100;
+		} else if (buyNet > 0) {
+			netProfit = parseFloat(buyNet, 10);
+		} else if (sellNet > 0) {
+			netProfit = parseFloat(sellNet, 10);
+		}
+		
+		var netProfitField = $('#net-profit');
+		var gainField = $('#gain');
+		
+		if (customNetProfit == undefined) {
+			netProfitField.val(formatCommas(netProfit.toFixed(decimalMajor)));
+		} else {
+			recNetProfitField = $('#rec-net-profit');
+			recNetProfitField.val(formatCommas(netProfit.toFixed(decimalMajor)));
+			recNetProfitField.removeClass('gain-font').removeClass('lose-font');
+			if (netProfit > 0) {
+				recNetProfitField.addClass('gain-font');
+			} else if (netProfit < 0) {
+				recNetProfitField.addClass('lose-font');
+			}
+		}
+		
+		netProfitField.removeClass('gain-font').removeClass('lose-font');
+		if (netProfit > 0) {
+			netProfitField.addClass('gain-font');
+		} else if (netProfit < 0) {
+			netProfitField.addClass('lose-font');
+		}
+		
+		gainField.val(formatCommas(gain.toFixed(decimalMajor)));
+		gainField.removeClass('gain-font').removeClass('lose-font');
+		if (gain > 0) {
+			gainField.addClass('gain-font');
+		} else if (gain < 0) {
+			gainField.addClass('lose-font');
+		}
+	}
+	
+	function resetBuyInfo() {
+				
+		$('#buy-gross').val('--');
+		$('#buy-comm').val('--');
+		$('#buy-vat').val('--');
+		$('#buy-sccp').val('--');
+		$('#buy-txfee').val('--');
+		$('#buy-totalcharges').val('--');
+		$('#buy-net').val('--');
+	}
+	
+	function resetSellInfo() {
+		$('#sell-gross').val('--');
+		$('#sell-comm').val('--');
+		$('#sell-vat').val('--');
+		$('#sell-sccp').val('--');
+		$('#sell-txfee').val('--');
+		$('#sell-salestax').val('--');
+		$('#sell-totalcharges').val('--');
+		$('#sell-net').val('--');
+	}
+	
+	function computeSellingPrice() {
+		var netProfit = parseFloat($(this).val().replace(/\,/g,''));
+		var buyNet = parseFloat($('#buy-net').val().replace(/\,/g,''));
+		var sellNet = buyNet + netProfit;
+		
+		var qty = $('#sell-qty').val();
+		
+		var commRate = parseFloat($('#comm-rate').val());
+		
+		var totalVat = commRate * vat;
+		var sellPrice = sellNet/(qty * (1 - parseFloat(commRate + totalVat + SCCP + salestaxinterest + PCDval)));
+		$('#sell-price').val(sellPrice.toFixed(decimalMajor));
+		
+		if (isNaN(netProfit) || netProfit == 0) {
+			resetSellInfo();
+		} else {
+			computeSellInfo();
+		}
+		computeNetInfo(netProfit);
+		
+		$('#rec-net-profit-div').show();
+	}
+	
+
+	
+});
+	
+	</script>
+</html>

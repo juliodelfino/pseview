@@ -28,8 +28,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
 
-        <link type="text/css" rel="stylesheet" href="/assets/flyoutmenu.css" />
-        <script src="/assets/flyoutmenu.js"></script>
+        <link type="text/css" rel="stylesheet" href="/assets/circle-menu/circle-menu.css" />
+        <script src="/assets/circle-menu/circleMenu.min.js"></script>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -191,8 +191,58 @@
                     <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
                 </form>
             </div>
+            
+     <!--       <nav class="c-circle-menu js-menu">
+		  <button class="c-circle-menu__toggle js-menu-toggle">
+		    <span>Toggle</span>
+		  </button>
+		  <ul class="c-circle-menu__items">
+		    <li class="c-circle-menu__item">
+		      <a href="#" class="c-circle-menu__link">
+		        Hello
+		      </a>
+		    </li> -->
+		    <!-- more items here -->
+	 <!--	  </ul>
+		  <div class="c-circle-menu__mask js-menu-mask"></div>
+		</nav>
+	-->	
+<nav id="c-circle-nav" class="c-circle-menu js-menu">
+  <button id="c-circle-menu__toggle" class="c-circle-menu__toggle js-menu-toggle">
+    <span>Toggle</span>
+  </button>
+  <ul class="c-circle-menu__items">
+    <li class="c-circle-menu__item">
+      <a href="#" class="c-circle-menu__link">
+        House
+      </a>
+    </li>
+    <li class="c-circle-menu__item">
+      <a href="#" class="c-circle-menu__link">
+        Photo
+      </a>
+    </li>
+    <li class="c-circle-menu__item">
+      <a href="#" class="c-circle-menu__link">
+        Pin
+      </a>
+    </li>
+    <li class="c-circle-menu__item">
+      <a href="#" class="c-circle-menu__link">
+        Search
+      </a>
+    </li>
+    <li class="c-circle-menu__item">
+      <a href="#" class="c-circle-menu__link">
+        Tools
+      </a>
+    </li>
+  </ul>
+  <div class="c-circle-menu__mask c-mask js-menu-mask"></div>
+</nav>
+		
 
-            <div id='ss_menu'>
+     <!--   <div id='ss_menu'>
                 <div id="flyout-up">
                     <span>UP</span>
                 </div>
@@ -211,6 +261,7 @@
                     </div>
                 </div>
             </div>
+            -->
             <span class="text-muted">Source: PSE.COM.PH</span>
         </div>
     </body>
@@ -218,7 +269,7 @@
         var savedWatchlist = null;
         var companyMap = [];
         var paused = false;
-        var dailySummary = {};
+
         $(document).ready(function() {
 
             queryMap = getQueryString();
@@ -227,16 +278,17 @@
             }
             savedWatchlist = getWatchlistFromCookie(queryMap);
             initialize();
+            
+  var el = '.js-menu';
+  var myMenu = cssCircleMenu(el);
         });
 
         function initialize() {
 
-            getDailySummary(isMarketOpen());
+            $('#market-status').text(isMarketOpen() ? 'OPEN' : 'CLOSED');
             initPseTable();
             initPageComponents();
-            getDailySummary(function(){
-                tryStartPollingData();
-            });
+            tryStartPollingData();
         }
 
         //==== PSE table functions ==========
@@ -711,22 +763,6 @@
             }
             return null;
         }
-        
-        function getDailySummary(onMarketOpen) {
-        
-            $.ajax({
-                type : "GET",
-                url : "http://pse.jdelfino.com/summary.php",
-                dataType : "JSON"
-            }).done(function(data) {
-            	dailySummary = data.records[0];
-                $('#market-status').text(dailySummary.marketStatus);
-                if (dailySummary.marketStatus == "OPEN") {
-                    onMarketOpen();
-                }
-            });
-        }
-        
 
     </script>
 </html>

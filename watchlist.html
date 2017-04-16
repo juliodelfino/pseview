@@ -1,0 +1,113 @@
+<html>
+	<head>
+		<title>PSE - My Watchlist</title>
+		<script src="https://www.google.com/jsapi"></script>
+		<script src="assets/jquery.js"></script>
+		<script src="assets/common.js"></script>
+		<link type="text/css" rel="stylesheet" href="assets/common.css" />
+		
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
+		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+		
+		<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.css" />
+		<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid-theme.min.css" />
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.1/jsgrid.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.min.js"></script>
+
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<style>
+			
+
+			.container-fluid {
+				padding: 0;
+				margin: 1px;
+			}
+
+			.gain-font {
+				color: green;
+			}
+
+			.lose-font {
+				color: red;
+			}
+			
+			.grid-view-item {
+				display: inline-block;
+				color: white;
+				width: 22%;
+				height: 80px;
+				margin: 1.5%;
+				word-wrap: break-word;
+				text-align: center;
+				background: grey;
+				background: -webkit-linear-gradient(0deg, grey, #CCC);
+				background: linear-gradient(0deg, grey, #CCC);
+				font-size: 13px;
+				padding-top: 2px;
+			}
+			
+			.gv-symbol {
+				font-weight: bolder;
+				font-size: 16px;
+			}
+			
+			.grid-view-table .gain-font {
+				background: green;
+				background: -webkit-linear-gradient(0deg, green, #A6E3D5);
+				background: linear-gradient(0deg, green, #A6E3D5);
+			}
+			
+			.grid-view-table .lose-font {
+				background: red;
+				background: -webkit-linear-gradient(0deg, red, #E3A6B4);
+				background: linear-gradient(0deg, red, #E3A6B4);
+			}
+
+		</style>
+
+		<div class="container-fluid">
+			<div id="header-bar" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+			<div class="main">
+				<button class="btn btn-primary">Add</button>
+				<h4>My Watchlists</h4>
+				<div class="list-group">
+				  <a href="#" class="list-group-item">
+				    Cras justo odio
+				    <button class="close">x</button>
+				  </a>
+				  <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in
+				    <button class="close">x</button>
+				  </a>
+				  <a href="#" class="list-group-item list-group-item-action">Morbi leo risus
+				    <button class="close">x</button>
+				  </a>
+				  <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac
+				    <button class="close">x</button>
+				  </a>
+				  <a href="#" class="list-group-item list-group-item-action disabled">Vestibulum at eros
+				     <button class="close">x</button>
+				  </a>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+	
+		$(document).ready(function() {
+
+			
+		});
+
+	</script>
+</html>

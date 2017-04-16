@@ -1,0 +1,67 @@
+<style>
+    .navbar-inverse {
+        background-color: #002954;
+    }
+    
+    .navbar-inverse .navbar-brand, 
+    .navbar-inverse .navbar-nav > li > a,
+    .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+        color: #ADD5FF;
+    }
+    
+    .jsgrid-alt-row .jsgrid-cell {
+    
+        background-color: #E6EFF7;
+    }
+/*    
+    .jsgrid-header-row > .jsgrid-header-cell {
+        background-color: #3071a9;
+        color: #E6EFF7;
+    }
+  */  
+
+
+</style>
+
+<nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">PSE<span id="sub-title"></span></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a id="latest" href="/">Latest Updates</a></li>
+            <li><a id="magic30" href="/?stocks=AC+AEV+AGI+ALI+AP+BDO+BPI+DMC+EDC+EMP+FGEN+GLO+GTCAP+ICT+JFC+JGS+LTG+MBT+MEG+MER+MPI+PCOR+RLC+SCC+SECB+SM+SMC+SMPH+TEL+URC">Index Companies</a></li>
+            <li><a href="#" class="dropdown-toggle js-activated" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Watchlist <span class="caret"></span></a>
+              <ul id="menu-my-watchlist" class="dropdown-menu" role="menu">
+              </ul>
+            
+            </li>
+       <!--     <li><a href="/calc.html">Trade Calculator</a></li> -->
+            <li><a href="/stockinfo.html?code=2GO">Stock Information</a></li>
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+    
+    
+<script>
+
+$(document).ready(function () {
+    $(document).click(function (event) {
+        var clickover = $(event.target);
+        var $navbar = $(".navbar-collapse");               
+        var _opened = $navbar.hasClass("in");
+        if (_opened === true && !clickover.hasClass("navbar-toggle")) {      
+            $navbar.collapse('hide');
+        }
+    });
+});
+
+</script>
