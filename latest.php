@@ -1,5 +1,5 @@
  <?php 
-    $dataFile = 'data/latest.json';
+    $dataFile = 'gs://pseview.appspot.com/data/latest.json';
     
     if (is_market_open() || is_file_time_during_market_open($dataFile)) {
         
