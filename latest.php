@@ -1,7 +1,7 @@
  <?php 
     $dataFile = 'gs://pseview.appspot.com/data/latest.json';
     
-    if (is_market_open() || is_file_time_during_market_open($dataFile)) {
+    if (true || is_market_open() || is_file_time_during_market_open($dataFile)) {
         
         $referer_url = 'http://pse.com.ph/stockMarket/home.html';
         $get_stocks_url = 'http://pse.com.ph/stockMarket/home.html?method=getSecuritiesAndIndicesForPublic&ajax=true';
