@@ -1,10 +1,7 @@
 <?php
 $dataFile = 'gs://pseview.appspot.com/data/latest.json';
-echo "is market open: " . is_market_open();
-echo "is file time during market open: " . is_file_time_during_market_open($dataFile);
-echo "is file outdated: " . is_file_outdated($dataFile);
-echo "file timestamp: " . date(DATE_RFC2822, filemtime($filename));
-if (is_market_open() || is_file_time_during_market_open($dataFile) || is_file_outdated($dataFile)) {
+
+//if (is_market_open() || is_file_time_during_market_open($dataFile) || is_file_outdated($dataFile)) {
 
     $referer_url = 'http://pse.com.ph/stockMarket/home.html';
     $get_stocks_url = 'http://pse.com.ph/stockMarket/home.html?method=getSecuritiesAndIndicesForPublic&ajax=true';
@@ -19,9 +16,9 @@ if (is_market_open() || is_file_time_during_market_open($dataFile) || is_file_ou
     } else {
         file_put_contents($dataFile, $text) or die('Unable to write to a file');
     }
-} else {
-    $text = file_get_contents($dataFile) or die('File not found');
-}
+//} else {
+//    $text = file_get_contents($dataFile) or die('File not found');
+//}
 
 echo $text;
 
