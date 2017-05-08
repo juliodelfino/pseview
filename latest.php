@@ -11,7 +11,8 @@ $dataFile = 'gs://pseview.appspot.com/data/latest.json';
 
     $text = file_get_contents($get_stocks_url, false, $context);
 
-    if (empty($text)) {
+    //sometimes it's empty text or empty array []
+    if (empty($text) || strlen($text) < 3) {
         $text = file_get_contents($dataFile) or die('File not found');
     } else {
         file_put_contents($dataFile, $text) or die('Unable to write to a file');
