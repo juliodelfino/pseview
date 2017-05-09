@@ -1,6 +1,6 @@
  <?php 
     
-    $dataFile = 'data/companylist.json';
+    $dataFile = 'gs://pseview.appspot.com/data/companylist.json';
     
     function is_updated_file($filename) {
         $diff = time() - filemtime($filename);
