@@ -1,6 +1,6 @@
  <?php 
             
-    testDailySummary();
+    testCompanyInfoHistoricalData();
 
 
     function testFindSecurityOrCompany() {
