@@ -1,7 +1,16 @@
 <?php
-$dataFile = 'gs://pseview.appspot.com/data/latest.json';
 
-//if (is_market_open() || is_file_time_during_market_open($dataFile) || is_file_outdated($dataFile)) {
+parse_str($_SERVER['QUERY_STRING']);
+if (isset($storeOnly)) {
+    saveLatestFromPse();
+} else {
+    echoLatestFromPse();
+}
+
+function echoLatestFromPse() {
+        
+    $dataFile = 'gs://pseview.appspot.com/data/latest.json';
+    //if (is_market_open() || is_file_time_during_market_open($dataFile) || is_file_outdated($dataFile)) {
 
     $referer_url = 'http://pse.com.ph/stockMarket/home.html';
     $get_stocks_url = 'http://pse.com.ph/stockMarket/home.html?method=getSecuritiesAndIndicesForPublic&ajax=true';
@@ -21,7 +30,28 @@ $dataFile = 'gs://pseview.appspot.com/data/latest.json';
 //    $text = file_get_contents($dataFile) or die('File not found');
 //}
 
-echo $text;
+    echo $text;
+}
+
+function saveLatestFromPse() {
+        
+    $dataFile = 'gs://pseview.appspot.com/data/summary/pse_' . date('Ymd-his') . '.json';
+
+    $referer_url = 'http://pse.com.ph/stockMarket/home.html';
+    $get_stocks_url = 'http://pse.com.ph/stockMarket/home.html?method=getSecuritiesAndIndicesForPublic&ajax=true';
+    $opts = array('http' => array('method' => "GET", 'header' => "Referer: $referer_url\r\n"));
+
+    $context = stream_context_create($opts);
+
+    $text = file_get_contents($get_stocks_url, false, $context);
+
+    //sometimes it's empty text or empty array []
+    if (empty($text) || strlen($text) < 3) {
+        die('Summary from PSE is empty');
+    } else {
+        file_put_contents($dataFile, $text) or die('Unable to write to a file');
+    }
+}
 
 function get_DateTime($timestamp) {
     $tz = new DateTimeZone('Asia/Singapore');
