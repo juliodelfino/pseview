@@ -147,6 +147,12 @@
             .tab-pane {
                 padding-top: 10px;
             }
+            
+            .tab-content {
+                background: linear-gradient(left top, #fff, #ddd);
+                background: -webkit-linear-gradient(left top, #fff, #ddd);
+                background: -moz-linear-gradient(left top, #fff, #ddd);
+            }
 
             #company-description {
                 font-size: 12px;
@@ -190,6 +196,16 @@
                 margin: 0 0 0 8px;
                 display: none;
             }
+            
+            #stock-symbol-region {
+                background: linear-gradient(left top, #fff, #ddd); 
+                background: -moz-linear-gradient(left top, #fff, #ddd); 
+                background: -webkit-linear-gradient(left top, #fff, #ddd); 
+                
+                border-radius: 0 0 25px 0;
+                -moz-border-radius: 0 0 25px 0;
+                -webkit-border-radius: 0 0 25px 0;
+            }
 
         </style>
 
@@ -207,7 +223,8 @@
                         <td width="100%" style="padding-left: 5px"></td>
                     </tr>
                     <tr>
-                        <td><span id="stock-name" class="text-muted" style="font-size: 16px">--</span>
+                        <td id="stock-symbol-region">
+                            <span id="stock-name" class="text-muted" style="font-size: 16px">--</span>
                         <br/>
                         <span id="stock-latest" style="font-size: 48px; width: 100%">--</span></td>
                         <td style="font-size: 20px; vertical-align: middle; width: 140px"><span class="label label-main">DIFF</span><span id="stock-diff" class="value-main">--</span>
