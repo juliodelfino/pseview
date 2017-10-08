@@ -129,9 +129,9 @@ hr {
 
 #stock-symbol-region {
    
-    background: -moz-linear-gradient(135deg, #d7e3ef, #E3A6B4);
-    background: -webkit-linear-gradient(135deg, #d7e3ef, #E3A6B4);
-    background: linear-gradient(135deg, #d7e3ef, #E3A6B4);
+    background: -moz-linear-gradient(135deg, #d7e3ef, #fff);
+    background: -webkit-linear-gradient(135deg, #d7e3ef, #fff);
+    background: linear-gradient(135deg, #d7e3ef, #fff);
     border-radius: 0 0 25px 0;
     -moz-border-radius: 0 0 25px 0;
     -webkit-border-radius: 0 0 25px 0;
