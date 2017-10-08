@@ -1,0 +1,105 @@
+h3 {
+    text-align: center;
+    margin: 5px;
+}
+
+.container-fluid {
+    padding: 0;
+    margin: 1px;
+}
+
+.gain-font {
+    color: green;
+}
+
+.lose-font {
+    color: red;
+}
+
+.jsgrid {
+    overflow: visible;
+}
+
+.grid-view-item {
+    display: inline-block;
+    color: white;
+    width: 22%;
+    height: 80px;
+    margin: 1.5%;
+    word-wrap: break-word;
+    text-align: center;
+    background: grey;
+    background: -webkit-linear-gradient(0deg, grey, #CCC);
+    background: linear-gradient(0deg, grey, #CCC);
+    font-size: 11px;
+    padding-top: 2px;
+}
+
+.gv-symbol {
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.grid-view-table .gain-font {
+    background: green;
+    background: -webkit-linear-gradient(0deg, green, #A6E3D5);
+    background: linear-gradient(0deg, green, #A6E3D5);
+}
+
+.grid-view-table .lose-font {
+    background: red;
+    background: -webkit-linear-gradient(0deg, red, #E3A6B4);
+    background: linear-gradient(0deg, red, #E3A6B4);
+}
+
+.stock-menu {
+    float: right;
+    /* background: url("/images/more-btn.jpg"); */
+    /* background-size: 16px; */
+    width: 20px;
+}
+
+.jsgrid-grid-body {
+    min-height: 50%
+}
+
+.jsgrid-alt-row {
+    background-color: #d3e4ff;
+}
+
+.jsgrid-header-cell {
+    background-color: #06407c;
+    color: #000;
+    font-weight: normal;
+}
+
+#watchlist-actions {
+    padding: 3px 0;
+    display: none;
+}
+
+a[data-toggle=popover] {
+    color: inherit;
+}
+
+.popover {
+    color: black;
+}
+
+@media screen and (min-device-width: 767px) {
+    
+    .grid-view-item {
+        display: inline-block;
+        color: white;
+        width: 120px;
+        height: 80px;
+        margin: 10px;
+        word-wrap: break-word;
+        text-align: center;
+        background: grey;
+        background: -webkit-linear-gradient(0deg, grey, #CCC);
+        background: linear-gradient(0deg, grey, #CCC);
+        font-size: 11px;
+        padding-top: 2px;
+    }
+}
