@@ -63,16 +63,16 @@ h3 {
     min-height: 50%
 }
 
-.jsgrid-alt-row {
-    background-color: #d3e4ff;
-}
-
 .jsgrid-header-row > .jsgrid-header-cell {
     background-color: #06407c;
     color: #fff;
     font-weight: normal;
 }
-
+    
+.jsgrid-alt-row .jsgrid-cell {
+    background-color: #ede5da;
+}
+    
 #watchlist-actions {
     padding: 3px 0;
     display: none;
