@@ -1,0 +1,138 @@
+h3 {
+    text-align: center;
+    margin: 5px;
+}
+
+.container-fluid {
+    padding: 0;
+    margin: 1px;
+}
+
+.gain-font {
+    color: green;
+}
+
+.lose-font {
+    color: red;
+}
+
+.jsgrid {
+    overflow: visible;
+}
+
+.stock-menu {
+    float: right;
+    /* background: url("/images/more-btn.jpg"); */
+    /* background-size: 16px; */
+    width: 20px;
+}
+
+.jsgrid-grid-body {
+    min-height: 50%
+}
+
+.label {
+    color: #999;
+    font-weight: 300;
+}
+
+.label-main {
+    width: 50px;
+    display: inline-block;
+    text-align: left;
+}
+
+.value-main {
+    width: 80px;
+    font-size: 20px;
+}
+
+.value {
+    display: block;
+    padding-bottom: 8px;
+    padding-left: 5px;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.jsgrid-header-cell {
+    font-size: 12px;
+    color: #777;
+}
+
+.jsgrid-cell {
+    font-size: 10px;
+}
+
+/* Bootstrap overrides */
+.nav-tabs > li > a {
+    padding: 5px 15px;
+    font-size: 10px;
+}
+
+hr {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.tab-pane {
+    padding-top: 10px;
+}
+
+.tab-content {
+    background: linear-gradient(left top, #fff, #ddd);
+    background: -webkit-linear-gradient(left top, #fff, #ddd);
+    background: -moz-linear-gradient(left top, #fff, #ddd);
+}
+
+#company-description {
+    font-size: 12px;
+    padding: 10px;
+}
+
+/* Google charts */
+.btn-group {
+    width: 100%;
+    text-align: center;
+}
+
+.btn-group > .btn {
+    float: none;
+}
+
+.btn-primary {
+    background-color: white;
+    color: #337ab7;
+}
+
+#stock-badges {
+    -webkit-overflow-scrolling: touch;
+}
+
+.stock-badge {
+    margin-right: 3px;
+    background-color: #4e6b8c;
+}
+
+#stock-symbol-input {
+
+    float: left;
+    position: fixed;
+    font-size: 40px;
+    width: 100px;
+    text-transform: uppercase;
+    line-height: 40px;
+    border: none;
+    padding: 0;
+    margin: 0 0 0 8px;
+    display: none;
+}
+
+#stock-symbol-region {
+    background: linear-gradient(#fff, #4e6b8c);
+    background: -moz-linear-gradient(#fff, #4e6b8c);
+    background: -webkit-linear-gradient(#fff, #4e6b8c);
+    border-radius: 0 0 25px 0;
+    -moz-border-radius: 0 0 25px 0;
+    -webkit-border-radius: 0 0 25px 0;
+}

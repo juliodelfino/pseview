@@ -4,7 +4,6 @@
         <script src="https://www.google.com/jsapi"></script>
         <script src="assets/jquery.js"></script>
         <script src="assets/common.js"></script>
-        <link type="text/css" rel="stylesheet" href="assets/common.css" />
 
         <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
         <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css" />
@@ -28,187 +27,15 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+        <link type="text/css" rel="stylesheet" href="assets/common.css" />
+        <link type="text/css" rel="stylesheet" href="assets/stockinfo.css" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
         <meta charset="UTF-8">
     </head>
     <body>
-        <style>
-            h3 {
-                text-align: center;
-                margin: 5px;
-            }
-
-            .container-fluid {
-                padding: 0;
-                margin: 1px;
-            }
-
-            .gain-font {
-                color: green;
-            }
-
-            .lose-font {
-                color: red;
-            }
-
-            .jsgrid {
-                overflow: visible;
-            }
-
-            .grid-view-item {
-                display: inline-block;
-                color: white;
-                width: 22%;
-                height: 80px;
-                margin: 1.5%;
-                word-wrap: break-word;
-                text-align: center;
-                background: grey;
-                background: -webkit-linear-gradient(0deg, grey, #CCC);
-                background: linear-gradient(0deg, grey, #CCC);
-                font-size: 13px;
-                padding-top: 2px;
-            }
-
-            .gv-symbol {
-                font-weight: bolder;
-                font-size: 16px;
-            }
-
-            .grid-view-table .gain-font {
-                background: green;
-                background: -webkit-linear-gradient(0deg, green, #A6E3D5);
-                background: linear-gradient(0deg, green, #A6E3D5);
-            }
-
-            .grid-view-table .lose-font {
-                background: red;
-                background: -webkit-linear-gradient(0deg, red, #E3A6B4);
-                background: linear-gradient(0deg, red, #E3A6B4);
-            }
-
-            .stock-menu {
-                float: right;
-                /* background: url("/images/more-btn.jpg"); */
-                /* background-size: 16px; */
-                width: 20px;
-            }
-
-            .jsgrid-grid-body {
-                min-height: 50%
-            }
-
-            .label {
-                color: #999;
-                font-weight: 300;
-            }
-
-            .label-main {
-                width: 50px;
-                display: inline-block;
-                text-align: left;
-            }
-
-            .value-main {
-                width: 80px;
-                font-size: 20px;
-            }
-
-            .value {
-                display: block;
-                padding-bottom: 8px;
-                padding-left: 5px;
-                font-size: 18px;
-                font-weight: normal;
-            }
-
-            .jsgrid-header-cell {
-                font-size: 12px;
-                color: #777;
-            }
-
-            .jsgrid-cell {
-                font-size: 10px;
-            }
-
-            /* Bootstrap overrides */
-            .nav-tabs > li > a {
-                padding: 5px 15px;
-                font-size: 10px;
-            }
-
-            hr {
-                margin-top: 0px;
-                margin-bottom: 10px;
-            }
-
-            .tab-pane {
-                padding-top: 10px;
-            }
-            
-            .tab-content {
-                background: linear-gradient(left top, #fff, #ddd);
-                background: -webkit-linear-gradient(left top, #fff, #ddd);
-                background: -moz-linear-gradient(left top, #fff, #ddd);
-            }
-
-            #company-description {
-                font-size: 12px;
-                padding: 10px;
-            }
-
-            /* Google charts */
-            .btn-group {
-                width: 100%;
-                text-align: center;
-            }
-
-            .btn-group > .btn {
-                float: none;
-            }
-
-            .btn-primary {
-                background-color: white;
-                color: #337ab7;
-            }
-
-            #stock-badges {
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .stock-badge {
-                margin-right: 3px;
-                background-color: #eee;
-            }
-
-            #stock-symbol-input {
-
-                float: left;
-                position: fixed;
-                font-size: 40px;
-                width: 100px;
-                text-transform: uppercase;
-                line-height: 40px;
-                border: none;
-                padding: 0;
-                margin: 0 0 0 8px;
-                display: none;
-            }
-            
-            #stock-symbol-region {
-                background: linear-gradient(#fff, #ddd); 
-                background: -moz-linear-gradient(#fff, #ddd); 
-                background: -webkit-linear-gradient(#fff, #ddd); 
-                
-                border-radius: 0 0 25px 0;
-                -moz-border-radius: 0 0 25px 0;
-                -webkit-border-radius: 0 0 25px 0;
-            }
-
-        </style>
-
         <div class="container-fluid">
 
             <div id="header-bar" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>

@@ -4,6 +4,6 @@ body {
 	background-color: #d7e3ef;
 }
 
-.text-muted {
+.text-muted, .label, .label-main {
     color: #4e6b8c;
 }
