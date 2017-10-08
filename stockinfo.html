@@ -265,7 +265,7 @@
                 
                 //reset the color of the previously selected stock symbol
                 if (selectedStockSymbol != null) {
-                    $('#stock-badge-' + selectedStockSymbol).css('background-color', '#eee');
+                    $('#stock-badge-' + selectedStockSymbol).css('background-color', '#c0cddb');
                 }
                 
                 $('#stock-symbol-input').val(symbol);
@@ -356,7 +356,7 @@
                 $stockDiff = roundOff(stockInfo.headerChangeClose);
                 $('#stock-latest').text(reformat(stockInfo.headerLastTradePrice));
                 $('#stock-diff').text($stockDiff);
-                $('#stock-change').text(roundOff(stockInfo.headerPercChangeClose));
+                $('#stock-change').text(roundOff(stockInfo.headerPercChangeClose, 2));
                 $('#stock-prev').text(reformat(stockInfo.headerSqPrevious));
                 $('#stock-open').text(reformat(stockInfo.headerSqOpen));
                 $('#stock-high').text(reformat(stockInfo.headerSqHigh));
@@ -382,8 +382,9 @@
 
         }
 
-        function roundOff(strNum) {
-            return parseFloat(strNum.replace(/\,/g, ''));
+        function roundOff(strNum, decimalPlaces) {
+            var result = parseFloat(strNum.replace(/\,/g, ''));
+            return decimalPlaces == undefined ? result : result.toFixed(decimalPlaces);
         }
 
         function reformat(strNum) {
