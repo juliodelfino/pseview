@@ -42,14 +42,14 @@ h3 {
 
 .grid-view-table .gain-font {
     background: green;
-    background: -webkit-linear-gradient(0deg, green, #A6E3D5);
-    background: linear-gradient(0deg, green, #A6E3D5);
+    background: -webkit-linear-gradient(135deg, green, #A6E3D5);
+    background: linear-gradient(135deg, green, #A6E3D5);
 }
 
 .grid-view-table .lose-font {
     background: red;
-    background: -webkit-linear-gradient(0deg, red, #E3A6B4);
-    background: linear-gradient(0deg, red, #E3A6B4);
+    background: -webkit-linear-gradient(135deg, red, #E3A6B4);
+    background: linear-gradient(135deg, red, #E3A6B4);
 }
 
 .stock-menu {
