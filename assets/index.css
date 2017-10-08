@@ -67,9 +67,9 @@ h3 {
     background-color: #d3e4ff;
 }
 
-.jsgrid-header-cell {
+.jsgrid-header-row > .jsgrid-header-cell {
     background-color: #06407c;
-    color: #000;
+    color: #fff;
     font-weight: normal;
 }
 
@@ -86,7 +86,7 @@ a[data-toggle=popover] {
     color: black;
 }
 
-@media screen and (min-device-width: 767px) {
+@media screen and (min-device-width: 450px) {
     
     .grid-view-item {
         display: inline-block;
