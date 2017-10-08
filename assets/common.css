@@ -3,3 +3,7 @@ body {
 	padding-top: 50px;
 	background-color: #d7e3ef;
 }
+
+.text-muted {
+    color: #4e6b8c;
+}

@@ -29,8 +29,8 @@ h3 {
     word-wrap: break-word;
     text-align: center;
     background: grey;
-    background: -webkit-linear-gradient(0deg, grey, #CCC);
-    background: linear-gradient(0deg, grey, #CCC);
+    background: -webkit-linear-gradient(135deg, grey, #CCC);
+    background: linear-gradient(135deg, grey, #CCC);
     font-size: 11px;
     padding-top: 2px;
 }
@@ -91,9 +91,9 @@ a[data-toggle=popover] {
     .grid-view-item {
         display: inline-block;
         color: white;
-        width: 120px;
+        width: 105px;
         height: 80px;
-        margin: 10px;
+        margin: 5px;
         word-wrap: break-word;
         text-align: center;
         background: grey;
