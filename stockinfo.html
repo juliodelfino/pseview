@@ -45,25 +45,29 @@
                     <input id="stock-symbol-input" type="text" maxlength="5" />
                 </div>
 
-                <table width="100%">
-                    <tr>
-                        <td width="100%" style="padding-left: 5px"></td>
-                    </tr>
-                    <tr>
-                        <td id="stock-symbol-region">
-                            <span id="stock-name" class="text-muted" style="font-size: 16px">--</span>
-                        <br/>
-                        <span id="stock-latest" style="font-size: 48px; width: 100%">--</span></td>
-                        <td style="font-size: 20px; vertical-align: middle; width: 140px"><span class="label label-main">DIFF</span><span id="stock-diff" class="value-main">--</span>
-                        <br/>
-                        <span class="label label-main">CHG</span><span id="stock-change" class="value-main">--</span></td>
-                    </tr>
-                </table>
-                <p class="text-muted">
-                    As of <span id="stock-datetime">--</span>
-                </p>
+                <div style="padding: 0 5px">
+                    <table width="100%">
+                        <tr>
+                            <td width="100%" style="padding-left: 5px"></td>
+                        </tr>
+                        <tr>
+                            <td id="stock-symbol-region">
+                                <span id="stock-name" class="text-muted" style="font-size: 16px">--</span>
+                            <br/>
+                            <span id="stock-latest" style="font-size: 48px; width: 100%">--</span></td>
+                            <td style="font-size: 20px; vertical-align: middle; width: 140px; padding: 0 3px">
+                                <span class="label label-main">DIFF</span><span id="stock-diff" class="value-main">--</span>
+                                <br/>
+                                <span class="label label-main">CHG</span><span id="stock-change" class="value-main">--</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="text-muted">
+                        As of <span id="stock-datetime">--</span>
+                    </p>
+                </div>
                 
-        <div>
+        <div style="display: none">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- simple-ad -->
             <ins class="adsbygoogle"
@@ -793,7 +797,7 @@
 
                 var selectorsForFontUpdate = '#stock-name, #stock-latest, #stock-diff, #stock-change';
                 $(selectorsForFontUpdate).removeClass('gain-font lose-font');
-                $('#stock-symbol').css('background-color', '#777');
+                $('#stock-symbol').css('background-color', '#4e6b8c');
                 if (stockInfo.diff > 0) {
                     $(selectorsForFontUpdate).addClass('gain-font');
                     $('#stock-symbol').css('background-color', 'green');
