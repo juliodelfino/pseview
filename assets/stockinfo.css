@@ -138,3 +138,7 @@ hr {
     -moz-border-radius: 0 0 25px 0;
     -webkit-border-radius: 0 0 25px 0;
 }
+
+#stock-latest {
+    color: #4e6b8c;
+}

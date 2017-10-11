@@ -189,6 +189,7 @@
         var selectedStockSymbol = null;
         var companyInfoMap = [];
         var paused = false;
+        var defaultColor = '#4e6b8c';
 
         $(document).ready(function() {
 
@@ -273,7 +274,7 @@
                 }
                 
                 $('#stock-symbol-input').val(symbol);
-                $(this).css('background-color', '#777');
+                $(this).css('background-color', defaultColor);
                 scrollToBadge(symbol);
                 resetPage();
                 getLatestStockInfo(symbol);
@@ -373,7 +374,7 @@
                 var selectorsForFontUpdate = '#stock-name, #stock-latest, #stock-diff, #stock-change';
                 $(selectorsForFontUpdate).removeClass('gain-font lose-font');
                 var selectedBadge = $('#stock-badge-' + selectedStockSymbol);
-                selectedBadge.css('background-color', '#777');
+                selectedBadge.css('background-color', defaultColor);
                 if ($stockDiff > 0) {
                     $(selectorsForFontUpdate).addClass('gain-font');
                     selectedBadge.css('background-color', 'green');
@@ -722,7 +723,8 @@
                 tooltip : {
                     trigger : 'selection'
                 },
-                colors : ['#428bca']
+                colors : ['#428bca'],
+                backgroundColor: 'transparent'
             };
         }
 
@@ -748,7 +750,8 @@
                 tooltip : {
                     trigger : 'selection'
                 },
-                colors : ['#428bca']
+                colors : ['#428bca'],
+                backgroundColor: 'transparent'
             };
         }
 
@@ -797,7 +800,7 @@
 
                 var selectorsForFontUpdate = '#stock-name, #stock-latest, #stock-diff, #stock-change';
                 $(selectorsForFontUpdate).removeClass('gain-font lose-font');
-                $('#stock-symbol').css('background-color', '#4e6b8c');
+                $('#stock-symbol').css('background-color', defaultColor);
                 if (stockInfo.diff > 0) {
                     $(selectorsForFontUpdate).addClass('gain-font');
                     $('#stock-symbol').css('background-color', 'green');
