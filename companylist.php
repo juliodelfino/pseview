@@ -1,6 +1,8 @@
  <?php 
     
-    $dataFile = 'gs://pseview.appspot.com/data/companylist.json';
+    include('src/appconfig.php');
+    
+    $dataFile = AppConfig::STORAGE_URL . '/data/companylist.json';
     
     function is_updated_file($filename) {
         $diff = time() - filemtime($filename);

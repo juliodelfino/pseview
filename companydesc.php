@@ -1,8 +1,11 @@
  <?php 
     
+    include('src/appconfig.php');
+
+    
     parse_str($_SERVER['QUERY_STRING']);
     
-    $dataFile = 'gs://pseview.appspot.com/data/companydesc/' . $id . '_' . $code . '.txt';
+    $dataFile = AppConfig::STORAGE_URL . '/data/companydesc/' . $id . '_' . $code . '.txt';
     
     if (!file_exists($dataFile)) {
     

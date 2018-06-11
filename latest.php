@@ -1,5 +1,7 @@
 <?php
 
+include('src/appconfig.php');
+    
 parse_str($_SERVER['QUERY_STRING']);
 if (isset($storeOnly)) {
     saveLatestFromPse();
@@ -9,7 +11,8 @@ if (isset($storeOnly)) {
 
 function echoLatestFromPse() {
         
-    $dataFile = 'gs://pseview.appspot.com/data/latest.json';
+    //$dataFile = 'gs://pseview.appspot.com/data/latest.json';
+    $dataFile = 'data/latest.json';
     //if (is_market_open() || is_file_time_during_market_open($dataFile) || is_file_outdated($dataFile)) {
 
     $referer_url = 'http://pse.com.ph/stockMarket/home.html';
@@ -24,7 +27,7 @@ function echoLatestFromPse() {
     if (empty($text) || strlen($text) < 3) {
         $text = file_get_contents($dataFile) or die('File not found');
     } else {
-        file_put_contents($dataFile, $text) or die('Unable to write to a file');
+  //      file_put_contents($dataFile, $text) or die('Unable to write to a file');
     }
 //} else {
 //    $text = file_get_contents($dataFile) or die('File not found');
@@ -35,7 +38,7 @@ function echoLatestFromPse() {
 
 function saveLatestFromPse() {
         
-    $dataFile = 'gs://pseview.appspot.com/data/summary/pse_' . date('Ymd-his') . '.json';
+    $dataFile = AppConfig::STORAGE_URL . '/data/summary/pse_' . date('Ymd-his') . '.json';
 
     $referer_url = 'http://pse.com.ph/stockMarket/home.html';
     $get_stocks_url = 'http://pse.com.ph/stockMarket/home.html?method=getSecuritiesAndIndicesForPublic&ajax=true';
