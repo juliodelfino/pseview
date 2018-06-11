@@ -2,7 +2,6 @@
     
     include('src/appconfig.php');
 
-    
     parse_str($_SERVER['QUERY_STRING']);
     
     $dataFile = AppConfig::STORAGE_URL . '/data/companydesc/' . $id . '_' . $code . '.txt';
